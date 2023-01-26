@@ -1,10 +1,12 @@
-# This is a sample Python script.
+from utils.encode_instruction import encode_instruction
+from utils.encode_instructions import encode_instructions_from_file, print_encoded_instructions
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-
-from utils.get_instructions_asm_file import get_instructions_asm_file
-
+# 1. Instruction Fetch
+# 2. Instruction Decode
+# 3. Execute
+# 4. Memory
+# 5. Write Back
 # TODO: Accept format with parenthesis
 if __name__ == '__main__':
-    instructions = get_instructions_asm_file("teste.s")
+    code = encode_instructions_from_file('teste.s')
+    print_encoded_instructions(code, 'hex')

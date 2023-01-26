@@ -239,3 +239,5 @@ def encode_instruction(instruction):
         return _encode_uj(instruction, inst_operation)
     else:
         raise ValueError("Invalid type of instruction")
+
+
