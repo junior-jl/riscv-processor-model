@@ -38,3 +38,4 @@ class ALU:
             self.output = self.in_1 >> self.in_2
         else:
             self.output = None
+        return self.output

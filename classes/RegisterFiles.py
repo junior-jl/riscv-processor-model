@@ -45,25 +45,43 @@ class RegisterFiles:
         self.size = num_of_reg
         for i in range(num_of_reg):
             self.regs.append(Register(i))
+        self.write_enable = False
+        self.out_1 = None
+        self.out_2 = None
+        self.addr_s1 = None
+        self.addr_s2 = None
+        self.addr_dest = None
+        self.data_in = None
 
-    def write(self, key, value):
-        """
-        Writes a value to a register in the register file.
+    def write(self, value):
+        if not self.write_enable:
+            return 'Write Enable is unset!'
+        else:
+            self.regs[self.addr_dest].write(value)
 
-        :param key: The key/index of the register to write to
-        :param value: The value to be written to the register
-        """
-        self.regs[key].write(value)
+    # TODO: error handling
+    def get_value_rs1(self):
+        return self.regs[self.addr_s1].value
+
+    def get_value_rs2(self):
+        return self.regs[self.addr_s2].value
+
+    def get_value_rd(self):
+        return self.regs[self.addr_dest].value
 
     def get_value(self, key):
-        """
-        Gets the current value of a register in the register file.
-
-        :param key: The key/index of the register
-        :return: The current value of the register
-        """
         return self.regs[key].get_value()
+
+    def set_addresses(self, addr_dest, addr_s1, addr_s2):
+        self.addr_dest = addr_dest
+        self.addr_s1 = addr_s1
+        self.addr_s2 = addr_s2
+        return addr_dest, addr_s1, addr_s2
+
+    def set_write_enable(self, en):
+        self.write_enable = en
 
     def print_all(self):
         for i in range(self.size):
             print('Reg {}: {}'.format(i, self.get_value(i)))
+

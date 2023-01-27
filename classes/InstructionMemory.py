@@ -3,6 +3,7 @@ from utils.mask_bits import mask_bits
 
 class InstructionMemory:
     def __init__(self, words, encoded_instructions=None):
+        self.inst_out = None
         if not encoded_instructions:
             self.instructions = [0] * words
             self.instructions_bytes = [0] * words * 4
@@ -16,7 +17,8 @@ class InstructionMemory:
             raise ValueError('Accessing invalid address of instruction! RV32I instructions are 4 bytes wide.')
         if address >= len(self.instructions) * 4:
             raise IndexError('Accessing out of bounds address in instruction memory!')
-        return self.instructions[address // 4]
+        self.inst_out = self.instructions[address // 4]
+        return self.inst_out
 
     def fill_memory(self, encoded_instructions):
         for i in range(len(encoded_instructions)):
@@ -45,7 +47,8 @@ class InstructionMemory:
         self.fill_memory(encoded_instructions)
 
     def print_instructions(self):
-        print(self.instructions)
+        for i in range(len(self.instructions)):
+            print('Inst {:04X}: 0x{:08X}'.format(i, self.fetch_instruction(i * 4)))
 
     def extend_memory(self, num_of_new_instructions):
         self.instructions.extend([0] * num_of_new_instructions)

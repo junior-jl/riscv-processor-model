@@ -1,4 +1,4 @@
-def sign_extend(num, bits):
+def sign_extend(num, bits=32):
     if bits <= 0:
         raise ValueError("Number of bits must be greater than 0")
     sign_bit = (num < 0) << (bits - 1)

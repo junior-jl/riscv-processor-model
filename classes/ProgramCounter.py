@@ -1,6 +1,6 @@
 class ProgramCounter:
     """
-    A class that represents a program counter.
+    A class that represents a program counter for a RISC-V single cycle processor model.
 
     The program counter (PC) is a special register in a CPU that contains the address of the next instruction that
     will be executed.
