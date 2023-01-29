@@ -1,11 +1,8 @@
-from classes.ALU import ALU
-from classes.DataMemory import DataMemory
 from classes.Datapath import Datapath
 from classes.ControlUnit import ControlUnit
-from classes.InstructionMemory import InstructionMemory
-from classes.ProgramCounter import ProgramCounter
-from classes.RegisterFiles import RegisterFiles
+
 from utils.encode_instructions import encode_instructions_from_file
+
 
 # 1. Instruction Fetch
 # 2. Instruction Decode
@@ -14,23 +11,39 @@ from utils.encode_instructions import encode_instructions_from_file
 # 5. Write Back
 
 class Processor:
-    def __init__(self, datapath: Datapath, control: ControlUnit):
+    def __init__(self, datapath: Datapath = Datapath(), control: ControlUnit = ControlUnit()):
         self.datapath = datapath
         self.control = control
 
+    def load_instructions_from_file(self, file):
+        self.datapath.load_instructions_from_file(file)
+
+    def load_instructions_from_asm_file(self, file):
+        self.datapath.load_instructions_from_asm_file(file)
+
     def fetch_current_instruction(self):
-        pass
+        inst = self.datapath.fetch_current_instruction()
+        self.control.fetch_instruction(inst)
+        return inst
 
+    def set_control_signals(self):
+        self.control.set_signals()
 
-im = InstructionMemory(32)
-pc = ProgramCounter()
-rf = RegisterFiles(32)
-alu = ALU()
-dm = DataMemory(32)
-dp = Datapath(im, pc, rf, alu, dm)
-ctrl = ControlUnit
-code = encode_instructions_from_file('teste.s')
-im.fill_memory(code)
-im.print_instructions()
-cpu = Processor(dp, ctrl)
+    def print_registers(self):
+        self.datapath.print_registers()
+
+    def print_data_memory(self):
+        self.datapath.print_data_memory()
+
+    def print_instructions(self):
+        self.datapath.print_instructions()
+
+    def run(self):
+        self.load_instructions_from_asm_file('teste.s')
+        self.fetch_current_instruction()
+        self.set_control_signals()
+        self.control.print_signals()
+        self.print_instructions()
+        self.print_registers()
+        # self.print_data_memory()
 

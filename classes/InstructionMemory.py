@@ -1,8 +1,11 @@
+from utils.encode_instructions import encode_instructions
+from utils.get_instructions_asm_file import get_instructions_asm_file
 from utils.mask_bits import mask_bits
+from utils.write_file_encoded_instructions import write_file_encoded_instructions
 
 
 class InstructionMemory:
-    def __init__(self, words, encoded_instructions=None):
+    def __init__(self, words=32, encoded_instructions=None):
         self.inst_out = None
         if not encoded_instructions:
             self.instructions = [0] * words
@@ -37,7 +40,8 @@ class InstructionMemory:
     def load_instructions_from_file(self, file):
         try:
             with open(file, 'rb') as f:
-                encoded_instructions = f.read()
+                encoded_instructions = f.readlines()
+                encoded_instructions = [int(inst.strip()) for inst in encoded_instructions]
         except FileNotFoundError:
             print(f'Error: {file} not found')
             return
@@ -46,9 +50,16 @@ class InstructionMemory:
             return
         self.fill_memory(encoded_instructions)
 
+    def load_instructions_from_asm_file(self, file):
+        encoded_instructions_file = write_file_encoded_instructions(file)
+        self.load_instructions_from_file(encoded_instructions_file)
+
     def print_instructions(self):
         for i in range(len(self.instructions)):
             print('Inst {:04X}: 0x{:08X}'.format(i, self.fetch_instruction(i * 4)))
 
     def extend_memory(self, num_of_new_instructions):
         self.instructions.extend([0] * num_of_new_instructions)
+
+
+write_file_encoded_instructions('teste.s')

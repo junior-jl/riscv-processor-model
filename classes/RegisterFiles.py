@@ -3,7 +3,7 @@ class Register:
     A class that represents a single register in a register file.
     """
 
-    def __init__(self, key, value=0):
+    def __init__(self, key=0, value=0):
         """
         Initializes a new instance of the Register class.
 
@@ -35,7 +35,7 @@ class RegisterFiles:
     A class that represents a collection of registers in a register file.
     """
 
-    def __init__(self, num_of_reg):
+    def __init__(self, num_of_reg=32):
         """
         Initializes a new instance of the RegisterFiles class.
 

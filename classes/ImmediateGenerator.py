@@ -17,8 +17,8 @@ class ImmediateGenerator:
         return self.imm_out
 
     def generate(self):
-        if self.imm_sel == 'I':
-            self.imm_out = sign_extend(self.imm_in, 32)
-        else:
-            raise ValueError('Not a valid value for ImmSel!')
+        #if self.imm_sel == 'I':
+        self.imm_out = sign_extend(self.imm_in, 32)
+        #else:
+        #    raise ValueError('Not a valid value for ImmSel!')
 

@@ -10,7 +10,7 @@ class DataMemory:
     HALF_WORD = 2
     WORD = 4
 
-    def __init__(self, words):
+    def __init__(self, words=32):
         """
         Initialize the data memory with a given number of words
 
