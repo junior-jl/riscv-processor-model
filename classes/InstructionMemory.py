@@ -49,10 +49,11 @@ class InstructionMemory:
             print(f'Error: An error occurred while trying to read {file}')
             return
         self.fill_memory(encoded_instructions)
+        return encoded_instructions
 
     def load_instructions_from_asm_file(self, file):
         encoded_instructions_file = write_file_encoded_instructions(file)
-        self.load_instructions_from_file(encoded_instructions_file)
+        return self.load_instructions_from_file(encoded_instructions_file)
 
     def print_instructions(self):
         for i in range(len(self.instructions)):

@@ -1,5 +1,5 @@
-addi x8, x9, -12
-addi x7, x0, 244
+addi x1, x9, -55
+add x2, x1, x0
 sw x2, x3, 40
 lui, x5, 65535
 bne x1, x2, -50

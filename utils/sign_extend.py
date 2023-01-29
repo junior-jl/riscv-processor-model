@@ -1,6 +1,9 @@
-def sign_extend(num, bits=32):
+from utils.mask_bits import mask_bits
+
+
+def sign_extend(num, bits=32, sign=None, size=12):
     if bits <= 0:
         raise ValueError("Number of bits must be greater than 0")
-    sign_bit = (num < 0) << (bits - 1)
-    mask = (1 << bits) - 1
-    return (num & mask) | ((-num & sign_bit) << 1)
+    mask = ((1 << bits) - 1) << size if sign == 1 else 0
+    mask = mask_bits(mask, size, bits-1) << size
+    return num | mask

@@ -51,6 +51,32 @@ class Datapath():
         self.mem_rw = None
         self.pc_sel = 0
         self.wb_sel = 0
+        self.imm_sel = None
+        self.branch_unsigned = False
+        self.branch_eq = False
+        self.branch_lt = False
+        self.a_sel = None
+        self.b_sel = None
+        self.alu_sel = None
+        self.store_size = None
+        self.load_size = None
+        self.load_unsigned = False
+
+    def run(self):
+        self.fetch_current_instruction()
+        self.split_instruction()
+        self.set_reg_w_en(self.reg_w_en)
+        self.compare(self.branch_unsigned)
+        self.set_imm_sel(self.imm_sel)
+        self.pass_alu_inputs(self.a_sel, self.b_sel)
+        self.set_alu_operation(self.alu_sel)
+        self.operate()
+        self.set_mem_rw(self.mem_rw)
+        self.store_into_memory(self.store_size)
+        self.set_wb_sel(self.wb_sel)
+        self.write_back(self.load_size, self.load_unsigned)
+        self.set_pc_sel(self.pc_sel)
+        self.update_pc()
 
     def fetch_current_instruction(self):
         """
@@ -148,9 +174,7 @@ class Datapath():
         return self.reg_files.get_value_rd()
 
     def set_reg_w_en(self, enable):
-
-        self.reg_w_en = enable
-        self.reg_files.set_write_enable(self.reg_w_en)
+        self.reg_files.set_write_enable(enable)
 
     def compare(self, uns):
         data_rs1 = self.get_value_rs1()
@@ -178,9 +202,9 @@ class Datapath():
     def set_imm_sel(self, imm_sel):
         self.immediate_generator.set_selection(imm_sel)
 
-    def load_from_memory(self, size):
+    def load_from_memory(self, size, uns):
         address = self.operate()
-        value = self.data_mem.load(address, size)
+        value = self.data_mem.load(address, size, uns)
         self.reg_files.write(value)
         return value
 
@@ -198,9 +222,9 @@ class Datapath():
     def set_wb_sel(self, value):
         self.wb_sel = value
 
-    def write_back(self, size):
+    def write_back(self, size, uns):
         if self.wb_sel == 0:
-            return self.load_from_memory(size)
+            return self.load_from_memory(size, uns)
         elif self.wb_sel == 1:
             return self.load_from_alu()
         elif self.wb_sel == 2:
@@ -209,10 +233,10 @@ class Datapath():
             raise ValueError('Invalid option for WBSel!')
 
     def load_instructions_from_file(self, file):
-        self.inst_mem.load_instructions_from_file(file)
+        return self.inst_mem.load_instructions_from_file(file)
 
     def load_instructions_from_asm_file(self, file):
-        self.inst_mem.load_instructions_from_asm_file(file)
+        return self.inst_mem.load_instructions_from_asm_file(file)
 
     def print_registers(self):
         self.reg_files.print_all()
@@ -222,3 +246,28 @@ class Datapath():
 
     def print_instructions(self):
         self.inst_mem.print_instructions()
+
+    def set_signals(self,
+                    a_sel,
+                    pc_sel,
+                    b_sel,
+                    wb_sel,
+                    mem_rw,
+                    alu_sel,
+                    imm_sel,
+                    branch_unsigned,
+                    reg_w_en,
+                    size,
+                    load_unsigned):
+        self.reg_w_en = reg_w_en
+        self.mem_rw = mem_rw
+        self.pc_sel = pc_sel
+        self.wb_sel = wb_sel
+        self.imm_sel = imm_sel.value
+        self.branch_unsigned = branch_unsigned
+        self.a_sel = a_sel
+        self.b_sel = b_sel
+        self.alu_sel = alu_sel
+        self.store_size = size
+        self.load_size = size
+        self.load_unsigned = load_unsigned

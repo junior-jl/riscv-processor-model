@@ -83,5 +83,5 @@ class RegisterFiles:
 
     def print_all(self):
         for i in range(self.size):
-            print('Reg {}: {}'.format(i, self.get_value(i)))
+            print('Reg {}: 0x{:08X}'.format(i, self.get_value(i)))
 

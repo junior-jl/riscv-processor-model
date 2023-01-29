@@ -1,4 +1,4 @@
-addi x8, x9, -12
+addi x8, x9, 12
 addi x7, x0, 244
 sw x2, x3, 40
 lui, x5, 65535

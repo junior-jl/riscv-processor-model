@@ -14,17 +14,19 @@ class Processor:
     def __init__(self, datapath: Datapath = Datapath(), control: ControlUnit = ControlUnit()):
         self.datapath = datapath
         self.control = control
+        self.instructions = None
+        self.current_instruction = None
 
     def load_instructions_from_file(self, file):
         self.datapath.load_instructions_from_file(file)
 
     def load_instructions_from_asm_file(self, file):
-        self.datapath.load_instructions_from_asm_file(file)
+        self.instructions = self.datapath.load_instructions_from_asm_file(file)
 
     def fetch_current_instruction(self):
-        inst = self.datapath.fetch_current_instruction()
-        self.control.fetch_instruction(inst)
-        return inst
+        self.current_instruction = self.datapath.fetch_current_instruction()
+        self.control.fetch_instruction(self.current_instruction)
+        return self.current_instruction
 
     def set_control_signals(self):
         self.control.set_signals()
@@ -41,9 +43,18 @@ class Processor:
     def run(self):
         self.load_instructions_from_asm_file('teste.s')
         self.fetch_current_instruction()
-        self.set_control_signals()
-        self.control.print_signals()
-        self.print_instructions()
+        self.control.run()
+        self.datapath.set_signals(*self.control.get_signals())
+        self.datapath.run()
+        self.fetch_current_instruction()
+        self.control.run()
+        self.datapath.set_signals(*self.control.get_signals())
+        self.datapath.run()
         self.print_registers()
-        # self.print_data_memory()
+        self.fetch_current_instruction()
+        self.control.run()
+        self.datapath.set_signals(*self.control.get_signals())
+        self.datapath.run()
+        self.print_registers()
+        self.print_data_memory()
 

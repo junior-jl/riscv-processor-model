@@ -24,10 +24,15 @@ class ControlUnit:
         self.inst_type = None
         self.inst_load = False
         self.inst_jalr = False
+        self.size = 0
+        self.load_unsigned = 0
+
+    def run(self):
+        self.set_signals()
 
     def get_signals(self):
         return self.a_sel, self.pc_sel, self.b_sel, self.wb_sel, self.mem_rw, self.alu_sel, \
-               self.imm_sel, self.branch_unsigned, self.reg_w_enable
+               self.imm_sel, self.branch_unsigned, self.reg_w_enable, self.size, self.load_unsigned
 
     def print_signals(self):
         print(f'PCSel: {self.pc_sel}')
@@ -39,6 +44,8 @@ class ControlUnit:
         print(f'ALUSel: {self.alu_sel}')
         print(f'MemRW: {self.mem_rw}')
         print(f'WBSel: {self.wb_sel}')
+        print(f'Size: {self.size}')
+        print(f'Unsigned load: {self.load_unsigned}')
 
     def set_signals(self):
         self.get_info_from_instruction()
@@ -53,6 +60,24 @@ class ControlUnit:
         self.set_imm_sel()
         self.set_branch_unsigned()
         self.set_reg_w_enable()
+        self.set_size()
+
+    def set_size(self):
+        if self.funct3 == 0x0:
+            self.size = 1
+            self.load_unsigned = False
+        elif self.funct3 == 0x1:
+            self.size = 2
+            self.load_unsigned = False
+        elif self.funct3 == 0x2:
+            self.size = 4
+            self.load_unsigned = False
+        elif self.funct3 == 0x4:
+            self.size = 1
+            self.load_unsigned = True
+        elif self.funct3 == 0x5:
+            self.size = 2
+            self.load_unsigned = True
 
     def set_a_sel(self):
         if self.inst_type in [InstructionType.UJ, InstructionType.SB]:
@@ -90,7 +115,7 @@ class ControlUnit:
         self.alu_sel = self.operation
 
     def set_imm_sel(self):
-        pass
+        self.imm_sel = self.inst_type
 
     def set_b_sel(self):
         if self.inst_type in [InstructionType.I, InstructionType.S, InstructionType.SB, InstructionType.U]:
@@ -121,6 +146,7 @@ class ControlUnit:
             self.inst_type = InstructionType.I
             if self.inst_opcode == 0x03:
                 self.inst_load = True
+                self.set_size()
             else:
                 self.inst_load = False
             if self.inst_opcode == 0x67:
@@ -129,6 +155,7 @@ class ControlUnit:
                 self.inst_jalr = False
         elif self.inst_opcode == 0x23:
             self.inst_type = InstructionType.S
+            self.set_size()
         elif self.inst_opcode == 0x63:
             self.inst_type = InstructionType.SB
         elif self.inst_opcode == 0x6F:
@@ -136,7 +163,7 @@ class ControlUnit:
         elif self.inst_opcode in [0x37, 0x17]:
             self.inst_type = InstructionType.U
         else:
-            raise ValueError('Invalid instruction! Opcode not supported!')
+            raise ValueError(f'Invalid instruction! Opcode ({self.inst_opcode}) not supported!')
 
     def get_operation(self):
         if self.inst_type == InstructionType.R:

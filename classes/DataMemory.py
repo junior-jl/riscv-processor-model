@@ -42,10 +42,11 @@ class DataMemory:
         self.write_enable = write
         self.read_enable = read
 
-    def load(self, address, size):
+    def load(self, address, size, uns):
         """
         Loads a value from memory at a given address and size.
 
+        :param uns: Zero-extends the output if set.
         :param address: The address of the memory location to be loaded.
         :type address: int
         :param size: The size of the value to be loaded. Must be one of
@@ -60,15 +61,15 @@ class DataMemory:
         if not self.read_enable:
             return 'Read Enable is unset!'
         elif size not in (DataMemory.BYTE, DataMemory.HALF_WORD, DataMemory.WORD):
-            raise ValueError("Invalid size argument, must be DataMemory.BYTE, "
+            raise ValueError(f"Invalid size argument ({size}), must be DataMemory.BYTE, "
                              "DataMemory.HALF_WORD, or DataMemory.WORD!")
         elif address + size - 1 >= len(self.data):
-            raise IndexError('Accessing out of bounds address in data memory!')
+            raise IndexError(f'Accessing out of bounds address ({address + size - 1}) in data memory!')
         else:
             self.data_out = 0
             for i in range(size):
                 self.data_out |= self.data[address + i] << (8 * i)
-            return sign_extend(self.data_out)
+            return self.data_out if uns else sign_extend(self.data_out)
 
     def store(self, address, value, size):
         """
@@ -90,31 +91,31 @@ class DataMemory:
         if not self.write_enable:
             return 'Write Enable is unset!'
         elif size not in (DataMemory.BYTE, DataMemory.HALF_WORD, DataMemory.WORD):
-            raise ValueError("Invalid size argument, must be DataMemory.BYTE, "
+            raise ValueError(f"Invalid size argument {(size)}, must be DataMemory.BYTE, "
                              "DataMemory.HALF_WORD, or DataMemory.WORD!")
         elif size == DataMemory.BYTE:
             if value > 0xFF:
-                raise ValueError('Value is greater than 0xFF.')
+                raise ValueError(f'Value ({value}) is greater than 0xFF.')
             self.data_in = value
             if address >= len(self.data):
-                raise IndexError('Accessing out of bounds address in data memory!')
+                raise IndexError(f'Accessing out of bounds address ({address}) in data memory!')
             self.data[address] = self.data_in
             return self.data[address]
         elif size == DataMemory.HALF_WORD:
             if value > 0xFFFF:
-                raise ValueError('Value is greater than 0xFFFF.')
+                raise ValueError(f'Value ({value}) is greater than 0xFFFF.')
             self.data_in = value
             if address + 1 >= len(self.data):
-                raise IndexError('Accessing out of bounds address in data memory!')
+                raise IndexError(f'Accessing out of bounds address ({address}) in data memory!')
             self.data[address] = mask_bits(self.data_in, 0, 7)
             self.data[address + 1] = mask_bits(self.data_in, 8, 15)
             return self.data[address] | (self.data[address + 1] << 8)
         elif size == DataMemory.WORD:
             if value > 0xFFFFFFFF:
-                raise ValueError('Value is greater than 0xFFFFFFFF.')
+                raise ValueError(f'Value ({value}) is greater than 0xFFFFFFFF.')
             self.data_in = value
             if address + 3 >= len(self.data):
-                raise IndexError('Accessing out of bounds address in data memory!')
+                raise IndexError(f'Accessing out of bounds address ({address}) in data memory!')
             self.data[address] = mask_bits(self.data_in, 0, 7)
             self.data[address + 1] = mask_bits(self.data_in, 8, 15)
             self.data[address + 2] = mask_bits(self.data_in, 16, 23)
