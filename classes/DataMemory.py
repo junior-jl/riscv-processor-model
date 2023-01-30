@@ -65,11 +65,13 @@ class DataMemory:
                              "DataMemory.HALF_WORD, or DataMemory.WORD!")
         elif address + size - 1 >= len(self.data):
             raise IndexError(f'Accessing out of bounds address ({address + size - 1}) in data memory!')
+        elif address % 4 != 0:
+            raise IndexError(f'Invalid address ({address}). Must be a multiple of 4!')
         else:
             self.data_out = 0
             for i in range(size):
                 self.data_out |= self.data[address + i] << (8 * i)
-            return self.data_out if uns else sign_extend(self.data_out)
+            return self.data_out if uns else sign_extend(self.data_out, size=size*8, sign=((self.data_out >> (size * 8 - 1)) & 1))
 
     def store(self, address, value, size):
         """
@@ -93,18 +95,20 @@ class DataMemory:
         elif size not in (DataMemory.BYTE, DataMemory.HALF_WORD, DataMemory.WORD):
             raise ValueError(f"Invalid size argument {(size)}, must be DataMemory.BYTE, "
                              "DataMemory.HALF_WORD, or DataMemory.WORD!")
+        elif address % 4 != 0:
+            raise IndexError(f'Invalid address ({address}). Must be a multiple of 4!')
         elif size == DataMemory.BYTE:
-            if value > 0xFF:
-                raise ValueError(f'Value ({value}) is greater than 0xFF.')
-            self.data_in = value
+            #if value > 0xFF:
+            #    raise ValueError(f'Value ({value}) is greater than 0xFF.')
+            self.data_in = mask_bits(value, 0, 7)
             if address >= len(self.data):
                 raise IndexError(f'Accessing out of bounds address ({address}) in data memory!')
             self.data[address] = self.data_in
             return self.data[address]
         elif size == DataMemory.HALF_WORD:
-            if value > 0xFFFF:
-                raise ValueError(f'Value ({value}) is greater than 0xFFFF.')
-            self.data_in = value
+            #if value > 0xFFFF:
+            #    raise ValueError(f'Value ({value}) is greater than 0xFFFF.')
+            self.data_in = mask_bits(value, 0, 15)
             if address + 1 >= len(self.data):
                 raise IndexError(f'Accessing out of bounds address ({address}) in data memory!')
             self.data[address] = mask_bits(self.data_in, 0, 7)
@@ -130,7 +134,7 @@ class DataMemory:
         :return: None
         """
         for i in range(len(self.data)):
-            print('Pos {}: 0x{:04X}'.format(i, self.get_value(i)))
+            print('Pos {:0X}: 0x{:04X}'.format(i, self.get_value(i)))
 
     def clear_memory(self):
         """

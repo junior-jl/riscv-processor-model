@@ -61,6 +61,3 @@ class InstructionMemory:
 
     def extend_memory(self, num_of_new_instructions):
         self.instructions.extend([0] * num_of_new_instructions)
-
-
-write_file_encoded_instructions('teste.s')

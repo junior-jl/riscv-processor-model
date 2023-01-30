@@ -40,21 +40,17 @@ class Processor:
     def print_instructions(self):
         self.datapath.print_instructions()
 
-    def run(self):
-        self.load_instructions_from_asm_file('teste.s')
-        self.fetch_current_instruction()
-        self.control.run()
-        self.datapath.set_signals(*self.control.get_signals())
-        self.datapath.run()
-        self.fetch_current_instruction()
-        self.control.run()
-        self.datapath.set_signals(*self.control.get_signals())
-        self.datapath.run()
-        self.print_registers()
-        self.fetch_current_instruction()
-        self.control.run()
-        self.datapath.set_signals(*self.control.get_signals())
-        self.datapath.run()
-        self.print_registers()
+    def run(self, file):
+        self.load_instructions_from_asm_file(file)
+        for i in range(len(self.instructions)):
+            print(f'Instruction {i + 1}:  {self.fetch_current_instruction()}')
+            self.fetch_current_instruction()
+            self.control.run()
+            self.datapath.set_signals(*self.control.get_signals())
+            self.datapath.run()
+            self.print_registers()
+
         self.print_data_memory()
+
+
 

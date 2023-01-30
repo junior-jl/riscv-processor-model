@@ -131,11 +131,16 @@ def _encode_i(inst, mnemonic):
     # I-Type
     # imm[11:0]    rs1     funct3      rd      opcode
     #    (12)      (5)       (3)       (5)       (7)
-    # opcode = 0010011 (0x13)
+    # opcode = 0010011 (0x13) - arithmetics, 0000011 (0x03) - loads, 1100111 (0x67) - jalr
     rd = registers[inst[1]]
     rs1 = registers[inst[2]]
     imm = sign_extend(int(inst[3]), 12)
-    opcode = 0x13
+    if mnemonic == 'jalr':
+        opcode = 0x67
+    elif mnemonic in ['lb', 'lh', 'lw', 'lbu', 'lhu']:
+        opcode = 0x03
+    else:
+        opcode = 0x13
     funct3 = f3[mnemonic]
     encoded_instruction = 0 if mnemonic != 'srai' else (1 << 30)
     encoded_instruction |= (imm << (32 - 12))

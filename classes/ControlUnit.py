@@ -195,7 +195,7 @@ class ControlUnit:
                     raise ValueError('Invalid funct3 for funct7 = 0x20'.format(self.funct3))
             else:
                 raise ValueError('Invalid funct7 {}!'.format(self.funct7))
-        elif self.inst_type == InstructionType.I:
+        elif self.inst_type == InstructionType.I and not self.inst_load and not self.inst_jalr:
             if self.funct3 == 0x0:
                 self.operation = 'add'
             elif self.funct3 == 0x4:
@@ -213,10 +213,11 @@ class ControlUnit:
             elif self.funct3 == 0x2:
                 self.operation = 'slt'
             elif self.funct3 == 0x3:
-                self.operation = 'stlu'
+                self.operation = 'sltu'
             else:
                 raise ValueError('Invalid combination of funct3 ({}) and funct7 ({})'.format(self.funct3, self.funct7))
-        elif self.inst_type in [InstructionType.UJ, InstructionType.U, InstructionType.S, InstructionType.SB]:
+        elif self.inst_type in [InstructionType.UJ, InstructionType.U, InstructionType.S, InstructionType.SB] or \
+                self.inst_load or self.inst_jalr:
             self.operation = 'add'
         else:
             raise ValueError('Invalid Instruction Type ({})!'.format(self.inst_type))

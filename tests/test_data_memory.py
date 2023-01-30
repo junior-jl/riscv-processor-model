@@ -13,10 +13,12 @@ def test_init():
     assert not dm.write_enable
     assert not dm.read_enable
 
+
 def test_get_value():
     dm = DataMemory(16)
     dm.data[0] = 5
     assert dm.get_value(0) == 5
+
 
 def test_set_enable():
     dm = DataMemory(16)
@@ -26,6 +28,7 @@ def test_set_enable():
     dm.set_enable(True, True)
     assert dm.write_enable
     assert dm.read_enable
+
 
 def test_load():
     dm = DataMemory(16)
@@ -40,6 +43,7 @@ def test_load():
         dm.load(0, 5)
     with pytest.raises(IndexError):
         dm.load(16, DataMemory.WORD)
+
 
 def test_store():
     dm = DataMemory(16)

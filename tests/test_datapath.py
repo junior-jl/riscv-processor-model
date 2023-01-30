@@ -1,13 +1,4 @@
 import pytest
-from classes.ALU import ALU
-from classes.BranchComparator import BranchComparator
-from classes.DataMemory import DataMemory
-from classes.ImmediateGenerator import ImmediateGenerator
-from classes.InstructionMemory import InstructionMemory
-from classes.ProgramCounter import ProgramCounter
-from classes.RegisterFiles import RegisterFiles
-from utils.mask_bits import mask_bits
-from classes.Datapath import Datapath
 
 
 @pytest.fixture
@@ -97,7 +88,6 @@ from classes.ImmediateGenerator import ImmediateGenerator
 from classes.InstructionMemory import InstructionMemory
 from classes.ProgramCounter import ProgramCounter
 from classes.RegisterFiles import RegisterFiles
-from utils.mask_bits import mask_bits
 from classes.Datapath import Datapath
 
 
