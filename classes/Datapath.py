@@ -78,6 +78,24 @@ class Datapath():
         self.set_pc_sel(self.pc_sel)
         self.update_pc()
 
+    def first_run_branch(self):
+        self.fetch_current_instruction()
+        self.split_instruction()
+        self.set_reg_w_en(self.reg_w_en)
+        self.compare(self.branch_unsigned)
+
+    def second_run_branch(self):
+        self.set_imm_sel(self.imm_sel)
+        self.pass_alu_inputs(self.a_sel, self.b_sel)
+        self.set_alu_operation(self.alu_sel)
+        self.operate()
+        self.set_mem_rw(self.mem_rw)
+        self.store_into_memory(self.store_size)
+        self.set_wb_sel(self.wb_sel)
+        self.write_back(self.load_size, self.load_unsigned)
+        self.set_pc_sel(self.pc_sel)
+        self.update_pc()
+
     def fetch_current_instruction(self):
         """
         Fetch the current instruction from the instruction memory at the current program counter value.
@@ -182,7 +200,8 @@ class Datapath():
         self.branch_comparator.pass_inputs(data_rs1, data_rs2)
         if uns:
             self.branch_comparator.set_unsigned()
-        self.branch_comparator.compare()
+        self.branch_eq, self.branch_lt = self.branch_comparator.compare()
+        return self.branch_eq, self.branch_lt
 
     def pass_alu_inputs(self, a_sel, b_sel):
         a = self.get_pc() if a_sel else self.get_value_rs1()

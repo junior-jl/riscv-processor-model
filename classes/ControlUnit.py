@@ -4,6 +4,7 @@ from utils.mask_bits import mask_bits
 
 class ControlUnit:
     def __init__(self):
+        self.comparison_type = None
         self.operation = None
         self.alu_sel = None  # ALUSel (operation selection for ALU)
         self.imm_sel = None  # ImmSel (mode of operation for immediate generator)
@@ -79,14 +80,42 @@ class ControlUnit:
             self.size = 2
             self.load_unsigned = True
 
+    def set_comparison_type(self):
+        if self.inst_opcode == 0x63:
+            if self.funct3 == 0x0:
+                self.comparison_type = 'beq'
+            elif self.funct3 == 0x1:
+                self.comparison_type = 'bne'
+            elif self.funct3 in [0x4, 0x6]:
+                self.comparison_type = 'blt'
+            elif self.funct3 in [0x5, 0x7]:
+                self.comparison_type = 'bge'
+            else:
+                self.comparison_type = None
+        else:
+            self.comparison_type = None
+        return self.comparison_type
+
     def set_a_sel(self):
-        if self.inst_type in [InstructionType.UJ, InstructionType.SB] or self.inst_opcode == 0x17:
+        if self.inst_type in [InstructionType.UJ, InstructionType.SB]:
             self.a_sel = 1
         else:
             self.a_sel = 0
 
+    def branch(self, eq, lt):
+        self.branch_equal = eq
+        self.branch_less_than = lt
+        return self.branch_equal, self.branch_less_than
+
+    def branch_taken(self):
+        return (self.branch_equal and (self.set_comparison_type() == 'beq')) or (
+                self.branch_less_than and (self.set_comparison_type() == 'blt')) or (
+                       not self.branch_equal and (self.set_comparison_type() == 'bne')) or (
+                       not self.branch_less_than and (self.set_comparison_type() == 'bge'))
+
     def set_pc_sel(self):
-        if self.branch_equal or self.branch_less_than or self.inst_jalr or self.inst_type == InstructionType.UJ:
+        if self.inst_jalr or self.inst_type == InstructionType.UJ or self.branch_taken():
+            # if self.branch_equal or self.branch_less_than or self.inst_jalr or self.inst_type == InstructionType.UJ:
             self.pc_sel = 1
         else:
             self.pc_sel = 0

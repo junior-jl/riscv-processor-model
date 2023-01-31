@@ -47,7 +47,7 @@ def test_update_pc(datapath):
     datapath.set_pc_sel(1)
     datapath.alu.output = 200
     datapath.update_pc()
-    assert datapath.prog_counter.get_value() == 300
+    assert datapath.prog_counter.get_value() == 200
 
 
 def test_increment_pc(datapath):

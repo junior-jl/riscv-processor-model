@@ -121,6 +121,7 @@ def test_run_ls(cpu):
     assert cpu.datapath.data_mem.get_value(0x6E) == 0x00
     assert cpu.datapath.data_mem.get_value(0x6F) == 0x00
 
+
 def test_run_i(cpu):
     cpu.run('files/teste_I.s')
     assert cpu.datapath.reg_files.get_value(0) == 0
@@ -145,6 +146,7 @@ def test_run_i(cpu):
         x |= cpu.datapath.reg_files.get_value(i)
     assert x == 0
 
+
 def test_run_jalr(cpu):
     cpu.run('files/test_jalr.s')
     assert cpu.datapath.reg_files.get_value(0) == 0
@@ -160,6 +162,7 @@ def test_run_jalr(cpu):
         x |= cpu.datapath.reg_files.get_value(i)
     assert x == 0
 
+
 def test_run_uj(cpu):
     cpu.run('files/test_uj.s')
     assert cpu.datapath.reg_files.get_value(0) == 0
@@ -174,6 +177,7 @@ def test_run_uj(cpu):
         x |= cpu.datapath.reg_files.get_value(i)
     assert x == 0
 
+
 def test_run_u(cpu):
     cpu.run('files/test_u.s')
     assert cpu.datapath.reg_files.get_value(0) == 0
@@ -185,5 +189,43 @@ def test_run_u(cpu):
     assert cpu.datapath.reg_files.get_value(6) == 0xABCDF00C
     x = 0
     for i in range(7, 32):
+        x |= cpu.datapath.reg_files.get_value(i)
+    assert x == 0
+
+
+def test_run_sb(cpu):
+    cpu.run('files/test_branches.s')
+    assert cpu.datapath.reg_files.get_value(0) == 0
+    assert cpu.datapath.reg_files.get_value(1) == 0x1
+    assert cpu.datapath.reg_files.get_value(2) == 0x2
+    assert cpu.datapath.reg_files.get_value(3) == 0xA
+    assert cpu.datapath.reg_files.get_value(4) == 0x0
+    assert cpu.datapath.reg_files.get_value(5) == 0x0
+    assert cpu.datapath.reg_files.get_value(6) == 0x28
+    assert cpu.datapath.reg_files.get_value(7) == 0x0
+    assert cpu.datapath.reg_files.get_value(8) == 0x3C
+    x = 0
+    for i in range(9, 32):
+        x |= cpu.datapath.reg_files.get_value(i)
+    assert x == 0
+
+def test_run_general_1(cpu):
+    cpu.run('files/general_test_1.s')
+    assert cpu.datapath.reg_files.get_value(0) == 0
+    assert cpu.datapath.reg_files.get_value(1) == 0x0
+    assert cpu.datapath.reg_files.get_value(2) == 0x0
+    assert cpu.datapath.reg_files.get_value(3) == 0x0
+    assert cpu.datapath.reg_files.get_value(4) == 0x0
+    assert cpu.datapath.reg_files.get_value(5) == 0x0
+    assert cpu.datapath.reg_files.get_value(6) == 0x28
+    assert cpu.datapath.reg_files.get_value(7) == 0x0
+    assert cpu.datapath.reg_files.get_value(8) == 0x3C
+    assert cpu.datapath.reg_files.get_value(10) == 0x1
+    assert cpu.datapath.reg_files.get_value(15) == 0xC
+    assert cpu.datapath.reg_files.get_value(20) == 0x2
+    x = 0
+    for i in range(9, 32):
+        if i in [10, 15, 20]:
+            continue
         x |= cpu.datapath.reg_files.get_value(i)
     assert x == 0

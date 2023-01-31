@@ -43,13 +43,31 @@ class Processor:
     def run(self, file):
         self.load_instructions_from_asm_file(file)
         while self.fetch_current_instruction():
-            print('IMEM {:0X}:  {:08X}'.format(4 * self.instructions.index(self.current_instruction),
-                                               self.current_instruction))
-            self.control.run()
-            self.datapath.set_signals(*self.control.get_signals())
-            self.datapath.run()
+            if self.current_instruction & 0x7F == 0x63:
+                self.run_branch()
+            else:
+                self.run_regular()
+
+    def run_regular(self):
+        print('IMEM {:0X}:  {:08X}'.format(4 * self.instructions.index(self.current_instruction),
+                                           self.current_instruction))
+        self.control.run()
+        self.datapath.set_signals(*self.control.get_signals())
+        self.datapath.run()
         self.print_registers()
         # self.print_data_memory()
+
+    def run_branch(self):
+        print('IMEM {:0X}:  {:08X}'.format(4 * self.instructions.index(self.current_instruction),
+                                           self.current_instruction))
+        self.control.run()
+        self.datapath.set_signals(*self.control.get_signals())
+        self.datapath.first_run_branch()
+        self.control.branch(self.datapath.branch_eq, self.datapath.branch_lt)
+        self.control.set_pc_sel()
+        self.datapath.set_pc_sel(self.control.pc_sel)
+        self.datapath.second_run_branch()
+        self.print_registers()
 
     def reset(self):
         self.datapath = Datapath()
