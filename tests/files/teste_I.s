@@ -2,8 +2,8 @@ addi x1, x0, 2000
 addi x2, x0, 1
 addi x3, x0, 2
 addi x4, x0, -50
-andi x5, x4, 4294967295
-ori x6, x4, 4294967295
+andi x5, x4, -1
+ori x6, x4, -1
 slti x7, x3, 1
 slti x8, x3, 3
 sltiu x9, x4, 55

@@ -33,11 +33,11 @@ def test_fill_memory():
 def test_load_instructions_from_file(tmpdir):
     # Create a temporary file with the string "12345678"
     temp_file = tmpdir.mkdir("sub").join("test.txt")
-    temp_file.write("12345678", )
+    temp_file.write('1234')
 
-    mem = InstructionMemory(9)
+    mem = InstructionMemory(4)
     mem.load_instructions_from_file(temp_file.strpath)
-    assert mem.instructions == [49, 50, 51, 52, 53, 54, 55, 56, 0]
+    assert mem.instructions == [1234, 0, 0, 0]
 
 
 def test_extend_memory():

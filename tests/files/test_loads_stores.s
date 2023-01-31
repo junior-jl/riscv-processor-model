@@ -14,3 +14,5 @@ sh x4, x20, 0
 lh x10, x20, 0
 sh x5, x20, 8
 lh x11, x20, 8
+lhu x12, x20, 8
+lbu x13, x20, 8

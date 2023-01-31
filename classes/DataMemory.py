@@ -71,7 +71,9 @@ class DataMemory:
             self.data_out = 0
             for i in range(size):
                 self.data_out |= self.data[address + i] << (8 * i)
-            return self.data_out if uns else sign_extend(self.data_out, size=size*8, sign=((self.data_out >> (size * 8 - 1)) & 1))
+            # return self.data_out if uns else sign_extend(self.data_out, size=size*8, sign=((self.data_out >> (size
+            # * 8 - 1)) & 1))
+            return self.data_out if uns else sign_extend(self.data_out, size=size * 8)
 
     def store(self, address, value, size):
         """

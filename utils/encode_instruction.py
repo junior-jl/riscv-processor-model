@@ -124,6 +124,7 @@ def _encode_r(inst, mnemonic):
     encoded_instruction |= (funct3 << (32 - 7 - 5 - 5 - 3))
     encoded_instruction |= (rd << (32 - 7 - 5 - 5 - 3 - 5))
     encoded_instruction |= opcode
+    encoded_instruction = mask_bits(encoded_instruction, 0, 31)
     return encoded_instruction
 
 
@@ -148,6 +149,7 @@ def _encode_i(inst, mnemonic):
     encoded_instruction |= (funct3 << (32 - 12 - 5 - 3))
     encoded_instruction |= (rd << (32 - 12 - 5 - 3 - 5))
     encoded_instruction |= opcode
+    encoded_instruction = mask_bits(encoded_instruction, 0, 31)
     return encoded_instruction
 
 
@@ -168,6 +170,7 @@ def _encode_s(inst, mnemonic):
     encoded_instruction |= (funct3 << (32 - 7 - 5 - 5 - 3))
     encoded_instruction |= ((mask_bits(imm, 0, 4)) << (32 - 7 - 5 - 5 - 3 - 5))
     encoded_instruction |= opcode
+    encoded_instruction = mask_bits(encoded_instruction, 0, 31)
     return encoded_instruction
 
 
@@ -184,6 +187,7 @@ def _encode_u(inst, mnemonic):
     encoded_instruction |= (imm << (32 - 20))
     encoded_instruction |= (rd << (32 - 20 - 5))
     encoded_instruction |= opcode
+    encoded_instruction = mask_bits(encoded_instruction, 0, 31)
     return encoded_instruction
 
 
@@ -206,6 +210,7 @@ def _encode_sb(inst, mnemonic):
     encoded_instruction |= ((mask_bits(imm, 1, 4)) << (32 - 1 - 6 - 5 - 5 - 3 - 4))
     encoded_instruction |= ((mask_bits(imm, 11, 11)) << (32 - 1 - 6 - 5 - 5 - 3 - 4 - 1))
     encoded_instruction |= opcode
+    encoded_instruction = mask_bits(encoded_instruction, 0, 31)
     return encoded_instruction
 
 
@@ -224,6 +229,7 @@ def _encode_uj(inst, mnemonic):
     encoded_instruction |= ((mask_bits(imm, 12, 19)) << (32 - 1 - 10 - 1 - 8))
     encoded_instruction |= (rd << (32 - 1 - 10 - 1 - 8 - 5))
     encoded_instruction |= opcode
+    encoded_instruction = mask_bits(encoded_instruction, 0, 31)
     return encoded_instruction
 
 
@@ -244,5 +250,4 @@ def encode_instruction(instruction):
         return _encode_uj(instruction, inst_operation)
     else:
         raise ValueError("Invalid type of instruction")
-
 

@@ -48,9 +48,16 @@ class Processor:
             self.control.run()
             self.datapath.set_signals(*self.control.get_signals())
             self.datapath.run()
-            self.print_registers()
-
+        self.print_registers()
         self.print_data_memory()
+
+
+    def reset(self):
+        self.datapath = Datapath()
+        self.control = ControlUnit()
+        self.instructions = None
+        self.current_instruction = None
+
 
 
 

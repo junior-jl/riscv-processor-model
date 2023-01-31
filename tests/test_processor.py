@@ -3,6 +3,7 @@ import pytest
 from classes.Processor import Processor
 
 
+# TODO: tests passing individually, but not together
 @pytest.fixture
 def cpu():
     return Processor()
@@ -33,7 +34,7 @@ def test_load_instruction_from_asm_file(cpu):
     assert cpu.instructions == [1048851,
                                 2097555,
                                 52429331,
-                                -57671021,
+                                4237296275,
                                 3212083,
                                 4293555,
                                 1076954163,
@@ -57,7 +58,7 @@ def test_fetch_current_instruction(cpu):
     assert cpu.fetch_current_instruction() == 52429331
 
 
-def test_run(cpu):
+def test_run_r(cpu):
     cpu.run('files/teste_r.s')
     assert cpu.datapath.reg_files.get_value(0) == 0
     assert cpu.datapath.reg_files.get_value(1) == 0
@@ -82,3 +83,40 @@ def test_run(cpu):
     for i in range(19, 32):
         x |= cpu.datapath.reg_files.get_value(i)
     assert x == 0
+
+
+def test_run_ls(cpu):
+    cpu.run('files/test_loads_stores.s')
+    assert cpu.datapath.reg_files.get_value(0) == 0
+    assert cpu.datapath.reg_files.get_value(1) == 0
+    assert cpu.datapath.reg_files.get_value(2) == 0
+    assert cpu.datapath.reg_files.get_value(3) == 0x50
+    assert cpu.datapath.reg_files.get_value(4) == 0x5
+    assert cpu.datapath.reg_files.get_value(5) == 0xFFFFFFEC
+    assert cpu.datapath.reg_files.get_value(6) == 0x5
+    assert cpu.datapath.reg_files.get_value(7) == 0xFFFFFFEC
+    assert cpu.datapath.reg_files.get_value(8) == 0x5
+    assert cpu.datapath.reg_files.get_value(9) == 0xFFFFFFEC
+    assert cpu.datapath.reg_files.get_value(10) == 0x5
+    assert cpu.datapath.reg_files.get_value(11) == 0xFFFFFFEC
+    assert cpu.datapath.reg_files.get_value(12) == 0xFFEC
+    assert cpu.datapath.reg_files.get_value(13) == 0xEC
+    assert cpu.datapath.reg_files.get_value(20) == 0x64
+    x = 0
+    for i in range(14, 32):
+        if i == 20:
+            continue
+        x |= cpu.datapath.reg_files.get_value(i)
+    assert x == 0
+    assert cpu.datapath.data_mem.get_value(0x50) == 5
+    assert cpu.datapath.data_mem.get_value(0x51) == 0
+    assert cpu.datapath.data_mem.get_value(0x52) == 0
+    assert cpu.datapath.data_mem.get_value(0x53) == 0
+    assert cpu.datapath.data_mem.get_value(0x58) == 0xEC
+    assert cpu.datapath.data_mem.get_value(0x59) == 0xFF
+    assert cpu.datapath.data_mem.get_value(0x5A) == 0xFF
+    assert cpu.datapath.data_mem.get_value(0x5B) == 0xFF
+    assert cpu.datapath.data_mem.get_value(0x6C) == 0xEC
+    assert cpu.datapath.data_mem.get_value(0x6D) == 0xFF
+    assert cpu.datapath.data_mem.get_value(0x6E) == 0x00
+    assert cpu.datapath.data_mem.get_value(0x6F) == 0x00
