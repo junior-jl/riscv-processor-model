@@ -51,13 +51,13 @@ class ImmediateGenerator:
             self.imm_out = sign_extend(num, sign=self.sign)
         elif self.imm_sel == 'U':
             num |= (mask_bits(self.imm_in, 5, 24) << 12)
-            self.imm_out = sign_extend(num, sign=self.sign)
+            self.imm_out = num
         elif self.imm_sel == 'UJ':
             num |= (mask_bits(self.imm_in, 14, 23) << 1)
             num |= (mask_bits(self.imm_in, 13, 13) << 11)
             num |= (mask_bits(self.imm_in, 5, 12) << 12)
             num |= (mask_bits(self.imm_in, 24, 24) << 20)
-            self.imm_out = num << 11
+            self.imm_out = sign_extend(num)
         else:
             self.imm_out = sign_extend(num, sign=self.sign)
 

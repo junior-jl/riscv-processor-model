@@ -80,13 +80,13 @@ class ControlUnit:
             self.load_unsigned = True
 
     def set_a_sel(self):
-        if self.inst_type in [InstructionType.UJ, InstructionType.SB]:
+        if self.inst_type in [InstructionType.UJ, InstructionType.SB] or self.inst_opcode == 0x17:
             self.a_sel = 1
         else:
             self.a_sel = 0
 
     def set_pc_sel(self):
-        if self.branch_equal or self.branch_less_than or self.inst_jalr:
+        if self.branch_equal or self.branch_less_than or self.inst_jalr or self.inst_type == InstructionType.UJ:
             self.pc_sel = 1
         else:
             self.pc_sel = 0
@@ -98,7 +98,7 @@ class ControlUnit:
             self.branch_unsigned = False
 
     def set_reg_w_enable(self):
-        if self.inst_type in [InstructionType.S, InstructionType.SB, InstructionType.U]:
+        if self.inst_type in [InstructionType.S, InstructionType.SB]:
             self.reg_w_enable = False
         else:
             self.reg_w_enable = True
@@ -106,7 +106,7 @@ class ControlUnit:
     def set_wb_sel(self):
         if self.inst_load:
             self.wb_sel = 0
-        elif self.inst_jalr:
+        elif self.inst_jalr or self.inst_type == InstructionType.UJ:
             self.wb_sel = 2
         else:
             self.wb_sel = 1
@@ -118,7 +118,7 @@ class ControlUnit:
         self.imm_sel = self.inst_type
 
     def set_b_sel(self):
-        if self.inst_type in [InstructionType.I, InstructionType.S, InstructionType.SB, InstructionType.U]:
+        if self.inst_type is not InstructionType.R:
             self.b_sel = 1
         else:
             self.b_sel = 0

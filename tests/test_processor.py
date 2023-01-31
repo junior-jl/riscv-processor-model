@@ -159,3 +159,31 @@ def test_run_jalr(cpu):
             continue
         x |= cpu.datapath.reg_files.get_value(i)
     assert x == 0
+
+def test_run_uj(cpu):
+    cpu.run('files/test_uj.s')
+    assert cpu.datapath.reg_files.get_value(0) == 0
+    assert cpu.datapath.reg_files.get_value(1) == 0x8
+    assert cpu.datapath.reg_files.get_value(2) == 0x0
+    assert cpu.datapath.reg_files.get_value(3) == 0x0
+    assert cpu.datapath.reg_files.get_value(4) == 0x0
+    assert cpu.datapath.reg_files.get_value(5) == 0x3
+    assert cpu.datapath.reg_files.get_value(6) == 0x3
+    x = 0
+    for i in range(7, 32):
+        x |= cpu.datapath.reg_files.get_value(i)
+    assert x == 0
+
+def test_run_u(cpu):
+    cpu.run('files/test_u.s')
+    assert cpu.datapath.reg_files.get_value(0) == 0
+    assert cpu.datapath.reg_files.get_value(1) == 0x0
+    assert cpu.datapath.reg_files.get_value(2) == 0x0
+    assert cpu.datapath.reg_files.get_value(3) == 0x0
+    assert cpu.datapath.reg_files.get_value(4) == 0xABCDEF12
+    assert cpu.datapath.reg_files.get_value(5) == 0x001F4008
+    assert cpu.datapath.reg_files.get_value(6) == 0xABCDF00C
+    x = 0
+    for i in range(7, 32):
+        x |= cpu.datapath.reg_files.get_value(i)
+    assert x == 0
