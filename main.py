@@ -10,5 +10,5 @@ from classes.Processor import Processor
 
 if __name__ == '__main__':
     cpu = Processor()
-    cpu.run('tests/files/test_loads_stores.s')
+    cpu.run('tests/files/gen_test.s')
 

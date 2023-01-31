@@ -182,7 +182,7 @@ def _encode_u(inst, mnemonic):
     # opcode = 0010111 (0x17) -> auipc
     opcode = 0x37 if mnemonic == 'lui' else 0x17
     rd = registers[inst[1]]
-    imm = sign_extend((int(inst[2])), 20)
+    imm = int(inst[2])
     encoded_instruction = 0
     encoded_instruction |= (imm << (32 - 20))
     encoded_instruction |= (rd << (32 - 20 - 5))

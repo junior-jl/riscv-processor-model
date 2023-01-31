@@ -86,7 +86,7 @@ class ControlUnit:
             self.a_sel = 0
 
     def set_pc_sel(self):
-        if self.branch_equal or self.branch_less_than:
+        if self.branch_equal or self.branch_less_than or self.inst_jalr:
             self.pc_sel = 1
         else:
             self.pc_sel = 0

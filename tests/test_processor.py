@@ -120,3 +120,42 @@ def test_run_ls(cpu):
     assert cpu.datapath.data_mem.get_value(0x6D) == 0xFF
     assert cpu.datapath.data_mem.get_value(0x6E) == 0x00
     assert cpu.datapath.data_mem.get_value(0x6F) == 0x00
+
+def test_run_i(cpu):
+    cpu.run('files/teste_I.s')
+    assert cpu.datapath.reg_files.get_value(0) == 0
+    assert cpu.datapath.reg_files.get_value(1) == 0x7D0
+    assert cpu.datapath.reg_files.get_value(2) == 0x1
+    assert cpu.datapath.reg_files.get_value(3) == 0x2
+    assert cpu.datapath.reg_files.get_value(4) == 0xFFFFFFCE
+    assert cpu.datapath.reg_files.get_value(5) == 0xFFFFFFCE
+    assert cpu.datapath.reg_files.get_value(6) == 0xFFFFFFFF
+    assert cpu.datapath.reg_files.get_value(7) == 0x0
+    assert cpu.datapath.reg_files.get_value(8) == 0x1
+    assert cpu.datapath.reg_files.get_value(9) == 0x0
+    assert cpu.datapath.reg_files.get_value(10) == 0x0
+    assert cpu.datapath.reg_files.get_value(11) == 0x8
+    assert cpu.datapath.reg_files.get_value(12) == 0xFFFFFFF3
+    assert cpu.datapath.reg_files.get_value(13) == 0x1FFFFFF9
+    assert cpu.datapath.reg_files.get_value(15) == 0xFFFFFFFC
+    x = 0
+    for i in range(14, 32):
+        if i == 15:
+            continue
+        x |= cpu.datapath.reg_files.get_value(i)
+    assert x == 0
+
+def test_run_jalr(cpu):
+    cpu.run('files/test_jalr.s')
+    assert cpu.datapath.reg_files.get_value(0) == 0
+    assert cpu.datapath.reg_files.get_value(1) == 0x8
+    assert cpu.datapath.reg_files.get_value(2) == 0x0
+    assert cpu.datapath.reg_files.get_value(3) == 0xC
+    assert cpu.datapath.reg_files.get_value(7) == 0x18
+    assert cpu.datapath.reg_files.get_value(31) == 0x1
+    x = 0
+    for i in range(4, 32):
+        if i == 7 or i == 31:
+            continue
+        x |= cpu.datapath.reg_files.get_value(i)
+    assert x == 0

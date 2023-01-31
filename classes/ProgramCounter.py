@@ -22,8 +22,8 @@ class ProgramCounter:
         self.value += 4
 
     def offset(self, offset):
-        if offset % 2 == 0:
-            self.value += offset
+        if offset % 4 == 0:
+            self.value = offset
         else:
             raise ValueError("Offset must be multiple of 2!")
 

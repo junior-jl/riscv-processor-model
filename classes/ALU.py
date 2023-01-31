@@ -55,4 +55,4 @@ class ALU:
             self.output = sign_extend(output, sign=mask_bits(output, size-self.in_2, size-self.in_2), size=size)
         else:
             self.output = None
-        return self.output
+        return mask_bits(self.output, 0, 31)

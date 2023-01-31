@@ -42,14 +42,14 @@ class Processor:
 
     def run(self, file):
         self.load_instructions_from_asm_file(file)
-        for i in range(len(self.instructions)):
-            print(f'Instruction {i + 1}:  {self.fetch_current_instruction()}')
+        while self.fetch_current_instruction():
+            print('IMEM {:0X}:  {:08X}'.format(4*self.instructions.index(self.current_instruction), self.current_instruction))
             self.fetch_current_instruction()
             self.control.run()
             self.datapath.set_signals(*self.control.get_signals())
             self.datapath.run()
         self.print_registers()
-        self.print_data_memory()
+        # self.print_data_memory()
 
 
     def reset(self):
