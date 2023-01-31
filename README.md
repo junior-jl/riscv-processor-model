@@ -82,7 +82,7 @@ options:
 
 ### Diagram of the processor
 
-
+![diagram](https://user-images.githubusercontent.com/69206952/215910571-19ea05a2-a4a4-4091-8b83-9e2aad815697.png)
 
 ### Problems
 
