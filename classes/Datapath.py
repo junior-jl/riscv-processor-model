@@ -62,6 +62,30 @@ class Datapath():
         self.load_size = None
         self.load_unsigned = False
 
+    def reset(self):
+        self.reg_w_en = None
+        self.inst_mem = InstructionMemory()
+        self.prog_counter = ProgramCounter()
+        self.reg_files = RegisterFiles()
+        self.alu = ALU()
+        self.data_mem = DataMemory()
+        self.branch_comparator = BranchComparator()
+        self.immediate_generator = ImmediateGenerator()
+        self.current_instruction = None
+        self.mem_rw = None
+        self.pc_sel = 0
+        self.wb_sel = 0
+        self.imm_sel = None
+        self.branch_unsigned = False
+        self.branch_eq = False
+        self.branch_lt = False
+        self.a_sel = None
+        self.b_sel = None
+        self.alu_sel = None
+        self.store_size = None
+        self.load_size = None
+        self.load_unsigned = False
+
     def run(self):
         self.fetch_current_instruction()
         self.split_instruction()

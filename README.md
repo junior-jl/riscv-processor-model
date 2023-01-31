@@ -1,5 +1,17 @@
 # RISCV Single Cycle Processor model - RV32I
 
+## Usage
+
+```bash
+usage: main.py [-h] [-f FILE] [-reg] [-mem]
+
+options:
+  -h, --help            show this help message and exit
+  -f FILE, --file FILE  file to run
+  -reg                  print register values
+  -mem                  print data memory values
+```
+
 ## Steps of a cycle
 
 1. Instruction Fetch
@@ -8,7 +20,7 @@
 4. Memory
 5. Write Back
 
-### Minor features
+### Improvements and features
 
 - [x] Support for instructions with or without commas
 - [x] Support for register API names
@@ -17,8 +29,9 @@
 - [ ] Support for comments
 - [ ] Support for pseudo-instructions
 - [ ] Support for labels
-- [ ] CLI execution and flags
+- [x] CLI execution and flags
 - [ ] Simple GUI
+- [ ] Make it a Python Package
 
 ### Current Status of Instructions
 
@@ -69,7 +82,7 @@
 
 ### Diagram of the processor
 
-![](D:\GitHub\riscv-processor-model\utils\diagram.png)
+
 
 ### Problems
 

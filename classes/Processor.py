@@ -54,7 +54,7 @@ class Processor:
         self.control.run()
         self.datapath.set_signals(*self.control.get_signals())
         self.datapath.run()
-        self.print_registers()
+        # self.print_registers()
         # self.print_data_memory()
 
     def run_branch(self):
@@ -67,10 +67,12 @@ class Processor:
         self.control.set_pc_sel()
         self.datapath.set_pc_sel(self.control.pc_sel)
         self.datapath.second_run_branch()
-        self.print_registers()
+        # self.print_registers()
 
     def reset(self):
         self.datapath = Datapath()
+        self.datapath.reset()
         self.control = ControlUnit()
+        self.control.reset()
         self.instructions = None
         self.current_instruction = None
