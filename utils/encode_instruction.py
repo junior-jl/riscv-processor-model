@@ -134,8 +134,12 @@ def _encode_i(inst, mnemonic):
     #    (12)      (5)       (3)       (5)       (7)
     # opcode = 0010011 (0x13) - arithmetics, 0000011 (0x03) - loads, 1100111 (0x67) - jalr
     rd = registers[inst[1]]
-    rs1 = registers[inst[2]]
-    imm = sign_extend(int(inst[3]), 12)
+    if inst[2] in registers.keys():
+        rs1 = registers[inst[2]]
+        imm = sign_extend(int(inst[3]), 12)
+    else:
+        rs1 = registers[inst[3]]
+        imm = sign_extend(int(inst[2]), 12)
     if mnemonic == 'jalr':
         opcode = 0x67
     elif mnemonic in ['lb', 'lh', 'lw', 'lbu', 'lhu']:
@@ -159,8 +163,12 @@ def _encode_s(inst, mnemonic):
     #   (7)         (5)     (5)       (3)         (5)        (7)
     # opcode = 0100011 (0x23)
     rs2 = registers[inst[1]]
-    rs1 = registers[inst[2]]
-    imm = sign_extend(int(inst[3]), 12)
+    if inst[2] in registers.keys():
+        rs1 = registers[inst[2]]
+        imm = sign_extend(int(inst[3]), 12)
+    else:
+        rs1 = registers[inst[3]]
+        imm = sign_extend(int(inst[2]), 12)
     opcode = 0x23
     funct3 = f3[mnemonic]
     encoded_instruction = 0

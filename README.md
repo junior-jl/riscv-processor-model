@@ -4,7 +4,7 @@
 
 - [x] Support for instructions with or without commas
 - [x] Support for register API names
-- [ ] Support for parenthesis notation, e.g. `sw x3, 0(x4)` instead of `sw x3, x4, 0`
+- [x] Support for parenthesis notation, e.g. `sw x3, 0(x4)` instead of `sw x3, x4, 0`
 - [ ] Support for other representations of immediates (hex, bin)
 - [ ] Support for comments
 - [ ] Support for pseudo-instructions
@@ -50,12 +50,12 @@
 | ADD UPPER IMM TO PC                      | auipc        | rd  | imm |       | OK         |                                                     |
 | LOAD UPPER IMMEDIATE                     | lui          | rd  | imm |       | OK         |                                                     |
 | **SB Type**                              |              |     |     |       |            |                                                     |
-| BRANCH IF EQUAL                          | beq          | rs1 | rs2 | imm   | TODO       |                                                     |
-| BRANCH IF GREATER OR EQUAL THAN          | bge          | rs1 | rs2 | imm   | TODO       |                                                     |
-| BRANCH IF GREATER OR EQUAL THAN UNSIGNED | bgeu         | rs1 | rs2 | imm   | TODO       |                                                     |
-| BRANCH IF LESS THAN                      | blt          | rs1 | rs2 | imm   | TODO       |                                                     |
-| BRANCH IF LESS THAN UNSIGNED             | bltu         | rs1 | rs2 | imm   | TODO       |                                                     |
-| BRANCH IF NOT EQUAL                      | bne          | rs1 | rs2 | imm   | TODO       |                                                     |
+| BRANCH IF EQUAL                          | beq          | rs1 | rs2 | imm   | OK         |                                                     |
+| BRANCH IF GREATER OR EQUAL THAN          | bge          | rs1 | rs2 | imm   | OK         |                                                     |
+| BRANCH IF GREATER OR EQUAL THAN UNSIGNED | bgeu         | rs1 | rs2 | imm   | OK         |                                                     |
+| BRANCH IF LESS THAN                      | blt          | rs1 | rs2 | imm   | OK         |                                                     |
+| BRANCH IF LESS THAN UNSIGNED             | bltu         | rs1 | rs2 | imm   | OK         |                                                     |
+| BRANCH IF NOT EQUAL                      | bne          | rs1 | rs2 | imm   | OK         |                                                     |
 | **UJ Type**                              |              |     |     |       |            |                                                     |
 | JUMP AND LINK                            | jal          | rd  | imm |       | OK         |                                                     |
 

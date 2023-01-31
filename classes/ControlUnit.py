@@ -97,7 +97,7 @@ class ControlUnit:
         return self.comparison_type
 
     def set_a_sel(self):
-        if self.inst_type in [InstructionType.UJ, InstructionType.SB]:
+        if self.inst_type in [InstructionType.UJ, InstructionType.SB] or self.inst_opcode == 0x17:
             self.a_sel = 1
         else:
             self.a_sel = 0
