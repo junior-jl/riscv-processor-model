@@ -25,7 +25,7 @@ options:
 - [x] Support for instructions with or without commas
 - [x] Support for register API names
 - [x] Support for parenthesis notation, e.g. `sw x3, 0(x4)` instead of `sw x3, x4, 0`
-- [ ] Support for other representations of immediates (hex, bin)
+- [x] Support for other representations of immediates (hex, bin)
 - [ ] Support for comments
 - [ ] Support for pseudo-instructions
 - [ ] Support for labels

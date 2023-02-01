@@ -136,10 +136,17 @@ def _encode_i(inst, mnemonic):
     rd = registers[inst[1]]
     if inst[2] in registers.keys():
         rs1 = registers[inst[2]]
-        imm = sign_extend(int(inst[3]), 12)
+        imm = inst[3]
     else:
         rs1 = registers[inst[3]]
-        imm = sign_extend(int(inst[2]), 12)
+        imm = inst[2]
+    if imm[0:2] in ['0x', '0X']:
+        imm = int(imm[2:], 16)
+    elif imm[0:2] in ['0b', '0B']:
+        imm = int(imm[2:], 2)
+    else:
+        imm = int(imm)
+    imm = sign_extend(imm, 12)
     if mnemonic == 'jalr':
         opcode = 0x67
     elif mnemonic in ['lb', 'lh', 'lw', 'lbu', 'lhu']:
@@ -165,10 +172,17 @@ def _encode_s(inst, mnemonic):
     rs2 = registers[inst[1]]
     if inst[2] in registers.keys():
         rs1 = registers[inst[2]]
-        imm = sign_extend(int(inst[3]), 12)
+        imm = inst[3]
     else:
         rs1 = registers[inst[3]]
-        imm = sign_extend(int(inst[2]), 12)
+        imm = inst[2]
+    if imm[0:2] in ['0x', '0X']:
+        imm = int(imm[2:], 16)
+    elif imm[0:2] in ['0b', '0B']:
+        imm = int(imm[2:], 2)
+    else:
+        imm = int(imm)
+    imm = sign_extend(imm, 12)
     opcode = 0x23
     funct3 = f3[mnemonic]
     encoded_instruction = 0
@@ -190,7 +204,12 @@ def _encode_u(inst, mnemonic):
     # opcode = 0010111 (0x17) -> auipc
     opcode = 0x37 if mnemonic == 'lui' else 0x17
     rd = registers[inst[1]]
-    imm = int(inst[2])
+    if inst[2][0:2] in ['0x', '0X']:
+        imm = int(inst[2][2:], 16)
+    elif inst[2][0:2] in ['0b', '0B']:
+        imm = int(inst[2][2:], 2)
+    else:
+        imm = int(inst[2])
     encoded_instruction = 0
     encoded_instruction |= (imm << (32 - 20))
     encoded_instruction |= (rd << (32 - 20 - 5))
@@ -207,7 +226,13 @@ def _encode_sb(inst, mnemonic):
     opcode = 0x63
     rs1 = registers[inst[1]]
     rs2 = registers[inst[2]]
-    imm = sign_extend((int(inst[3])), 13)
+    if inst[3][0:2] in ['0x', '0X']:
+        imm = int(inst[3][2:], 16)
+    elif inst[3][0:2] in ['0b', '0B']:
+        imm = int(inst[3][2:], 2)
+    else:
+        imm = int(inst[3])
+    imm = sign_extend(imm, 13)
     funct3 = f3[mnemonic]
     encoded_instruction = 0
     encoded_instruction |= ((mask_bits(imm, 12, 12)) << (32 - 1))
@@ -229,7 +254,13 @@ def _encode_uj(inst, mnemonic):
     # opcode = 1101111 (0x6F) -> jal
     opcode = 0x6F
     rd = registers[inst[1]]
-    imm = sign_extend(int(inst[2]), 21)
+    if inst[2][0:2] in ['0x', '0X']:
+        imm = int(inst[2][2:], 16)
+    elif inst[2][0:2] in ['0b', '0B']:
+        imm = int(inst[2][2:], 2)
+    else:
+        imm = int(inst[2])
+    imm = sign_extend(imm, 21)
     encoded_instruction = 0
     encoded_instruction |= ((mask_bits(imm, 20, 20)) << (32 - 1))
     encoded_instruction |= ((mask_bits(imm, 1, 10)) << (32 - 1 - 10))
@@ -258,4 +289,5 @@ def encode_instruction(instruction):
         return _encode_uj(instruction, inst_operation)
     else:
         raise ValueError("Invalid type of instruction")
+
 
