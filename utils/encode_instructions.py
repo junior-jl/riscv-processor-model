@@ -12,6 +12,6 @@ def encode_instructions_from_file(file):
 
 
 def print_encoded_instructions(encoded_instructions, representation):
-    if representation == 'hex':
+    if representation == "hex":
         for i in range(len(encoded_instructions)):
-            print('0x{:X}:\t0x{:08X}'.format(i * 4, encoded_instructions[i]))
+            print("0x{:X}:\t0x{:08X}".format(i * 4, encoded_instructions[i]))

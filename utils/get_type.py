@@ -18,23 +18,49 @@ def get_type(inst):
     """
     operation = inst[0]
     # R-Type
-    if operation.lower() in ['add', 'and', 'or', 'slt', 'sltu', 'sll', 'srl', 'sra', 'sub', 'xor']:
+    if operation.lower() in [
+        "add",
+        "and",
+        "or",
+        "slt",
+        "sltu",
+        "sll",
+        "srl",
+        "sra",
+        "sub",
+        "xor",
+    ]:
         type = InstructionType.R
     # I-Type
-    elif operation.lower() in ['addi', 'andi', 'jalr', 'lb', 'lbu', 'lhu', 'lh', 'lw', 'ori', 'slti', 'sltiu', 'slli',
-                             'srai', 'srli', 'xori']:
+    elif operation.lower() in [
+        "addi",
+        "andi",
+        "jalr",
+        "lb",
+        "lbu",
+        "lhu",
+        "lh",
+        "lw",
+        "ori",
+        "slti",
+        "sltiu",
+        "slli",
+        "srai",
+        "srli",
+        "xori",
+    ]:
         type = InstructionType.I
     # S-Type
-    elif operation.lower() in ['sb', 'sh', 'sw']:
+    elif operation.lower() in ["sb", "sh", "sw"]:
         type = InstructionType.S
     # U-Type
-    elif operation.lower() in ['auipc', 'lui']:
+    elif operation.lower() in ["auipc", "lui"]:
         type = InstructionType.U
     # SB-Type
-    elif operation.lower() in ['beq', 'bge', 'bgeu', 'blt', 'bltu', 'bne']:
+    elif operation.lower() in ["beq", "bge", "bgeu", "blt", "bltu", "bne"]:
         type = InstructionType.SB
     # UJ-Type
-    elif operation.lower() == 'jal':
+    elif operation.lower() == "jal":
         type = InstructionType.UJ
     else:
         raise ValueError("Invalid instruction!")

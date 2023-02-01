@@ -1,5 +1,6 @@
 from classes.RegisterFiles import RegisterFiles
 
+
 def test_register_files():
     # Create an instance of RegisterFiles with 10 registers
     rf = RegisterFiles(10)
@@ -18,7 +19,6 @@ def test_register_files():
     # Test getting the value of all registers
     rf.print_all()
 
-
     # Test getting the value of all registers after writing to some
     rf.set_addresses(1, 10, 1)
     rf.write(50)
@@ -32,4 +32,4 @@ def test_register_files():
     rf.print_all()
 
     rf.set_write_enable(False)
-    assert rf.write(10) == 'Write Enable is unset!'
+    assert rf.write(10) == "Write Enable is unset!"

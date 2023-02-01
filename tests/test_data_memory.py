@@ -38,7 +38,7 @@ def test_load():
     assert dm.load(4, DataMemory.HALF_WORD, False) == 0x0605
     assert dm.load(8, DataMemory.BYTE, False) == 0x09
     dm.set_enable(False, False)
-    assert dm.load(0, DataMemory.WORD, False) == 'Read Enable is unset!'
+    assert dm.load(0, DataMemory.WORD, False) == "Read Enable is unset!"
     dm.set_enable(False, True)
     with pytest.raises(ValueError):
         dm.load(0, 5, False)
@@ -56,7 +56,7 @@ def test_store():
     assert dm.store(8, 0x07, DataMemory.BYTE) == 0x07
     assert dm.data[8] == 0x07
     dm.set_enable(False, False)
-    assert dm.store(0, 0x04030201, DataMemory.WORD) == 'Write Enable is unset!'
+    assert dm.store(0, 0x04030201, DataMemory.WORD) == "Write Enable is unset!"
     dm.set_enable(True, False)
     with pytest.raises(ValueError):
         dm.store(0, 0x04030201, 5)

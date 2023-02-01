@@ -12,4 +12,4 @@ def get_instruction_parts(instruction):
     Returns:
     list: A list of the operation and operands of the instruction.
     """
-    return [_ for _ in re.split('[(.*?) ,]', instruction) if _]
+    return [_ for _ in re.split("[(.*?) ,]", instruction) if _]

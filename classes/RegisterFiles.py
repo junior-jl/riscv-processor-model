@@ -1,11 +1,11 @@
 class Register:
     """
-    A class that represents a single register in a register file.
+    A class that represents a single register in a register file on a RISC-V Processor.
     """
 
     def __init__(self, key=0, value=0):
         """
-        Initializes a new instance of the Register class.
+        Constructor method
 
         :param key: The key/index of the register
         :param value: The initial value of the register (default: 0)
@@ -18,6 +18,9 @@ class Register:
         Writes a value to the register.
 
         :param value: The value to be written to the register
+        :type value: int
+        :return: None
+        :rtype: NoneType
         """
         self.value = value if self.key else 0
 
@@ -26,20 +29,22 @@ class Register:
         Gets the current value of the register.
 
         :return: The current value of the register
+        :rtype: int
         """
         return self.value
 
 
 class RegisterFiles:
     """
-    A class that represents a collection of registers in a register file.
+    A class that represents a collection of registers in a RISC-V processor's register files.
     """
 
     def __init__(self, num_of_reg=32):
         """
-        Initializes a new instance of the RegisterFiles class.
+        Constructor method
 
         :param num_of_reg: The number of registers in the register file
+        :type num_of_reg: int
         """
         self.regs = []
         self.size = num_of_reg
@@ -55,7 +60,7 @@ class RegisterFiles:
 
     def write(self, value):
         if not self.write_enable:
-            return 'Write Enable is unset!'
+            return "Write Enable is unset!"
         else:
             self.regs[self.addr_dest].write(value)
 
@@ -83,5 +88,4 @@ class RegisterFiles:
 
     def print_all(self):
         for i in range(self.size):
-            print('Reg {}: 0x{:08X}'.format(i, self.get_value(i)))
-
+            print("Reg {}: 0x{:08X}".format(i, self.get_value(i)))

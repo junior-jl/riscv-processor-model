@@ -20,7 +20,15 @@ def datapath():
     data_mem = DataMemory(32)
     branch_comparator = BranchComparator()
     immediate_generator = ImmediateGenerator()
-    return Datapath(inst_mem, prog_counter, reg_files, alu, data_mem, branch_comparator, immediate_generator)
+    return Datapath(
+        inst_mem,
+        prog_counter,
+        reg_files,
+        alu,
+        data_mem,
+        branch_comparator,
+        immediate_generator,
+    )
 
 
 def test_fetch_current_instruction(datapath):
@@ -87,7 +95,7 @@ def test_get_value_rs2(datapath):
 
 def test_get_immediate(datapath):
     datapath.immediate_generator.imm_in = 0x1579BDE  # (1 0101 0111 1001 1011 1101 1110)
-    datapath.immediate_generator.set_selection('I')
+    datapath.immediate_generator.set_selection("I")
     assert datapath.get_immediate() == 0xFFFFFABC  # (ABC) sign-extended
 
 
@@ -102,5 +110,5 @@ def test_get_value_rd(datapath):
 
 
 def test_set_reg_w_en(datapath):
-    datapath.set_signals(0, 0, 0, 0, 0, 'add', InstructionType.I, 0, 1, 2, 0)
+    datapath.set_signals(0, 0, 0, 0, 0, "add", InstructionType.I, 0, 1, 2, 0)
     assert datapath.reg_w_en == 1

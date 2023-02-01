@@ -1,11 +1,12 @@
 from utils.mask_bits import mask_bits
 from utils.sign_extend import sign_extend
 
-# TODO: tests
+
 class DataMemory:
     """
     This class represents a data memory for a RISC-V single cycle processor model.
     """
+
     BYTE = 1
     HALF_WORD = 2
     WORD = 4
@@ -15,6 +16,7 @@ class DataMemory:
         Initialize the data memory with a given number of words
 
         :param words: The number of words the data memory has.
+        :type words: int
         """
         self.data = [0] * 4 * words
         self.data_in = None
@@ -28,7 +30,9 @@ class DataMemory:
         Get the value stored in a specific memory address.
 
         :param address: The memory address to retrieve the value from.
+        :type address: int
         :return: The value stored in the given memory address.
+        :rtype: int
         """
         return self.data[address]
 
@@ -36,8 +40,12 @@ class DataMemory:
         """
         Set the write and read enable flags for the data memory.
 
-        :param write: Boolean value indicating whether writing to the memory should be enabled.
-        :param read: Boolean value indicating whether reading from the memory should be enabled.
+        :param write: Value indicating whether writing to the memory should be enabled.
+        :type write: int
+        :param read: Value indicating whether reading from the memory should be enabled.
+        :type read: int
+        :return: None
+        :rtype: NoneType
         """
         self.write_enable = write
         self.read_enable = read
@@ -47,6 +55,7 @@ class DataMemory:
         Loads a value from memory at a given address and size.
 
         :param uns: Zero-extends the output if set.
+        :type uns: bool
         :param address: The address of the memory location to be loaded.
         :type address: int
         :param size: The size of the value to be loaded. Must be one of
@@ -54,19 +63,24 @@ class DataMemory:
         :type size: int
         :return: The value stored at the given address and size, or a string
                  'Read Enable is unset!' if read enable is not set.
+        :rtype: int
         :raises: ValueError if the size is not one of the specified constants.
                   IndexError if the address and size result in accessing memory
                   out of bounds.
         """
         if not self.read_enable:
-            return 'Read Enable is unset!'
+            return "Read Enable is unset!"
         elif size not in (DataMemory.BYTE, DataMemory.HALF_WORD, DataMemory.WORD):
-            raise ValueError(f"Invalid size argument ({size}), must be DataMemory.BYTE, "
-                             "DataMemory.HALF_WORD, or DataMemory.WORD!")
+            raise ValueError(
+                f"Invalid size argument ({size}), must be DataMemory.BYTE, "
+                "DataMemory.HALF_WORD, or DataMemory.WORD!"
+            )
         elif address + size - 1 >= len(self.data):
-            raise IndexError(f'Accessing out of bounds address ({address + size - 1}) in data memory!')
+            raise IndexError(
+                f"Accessing out of bounds address ({address + size - 1}) in data memory!"
+            )
         elif address % 4 != 0:
-            raise IndexError(f'Invalid address ({address}). Must be a multiple of 4!')
+            raise IndexError(f"Invalid address ({address}). Must be a multiple of 4!")
         else:
             self.data_out = 0
             for i in range(size):
@@ -88,60 +102,75 @@ class DataMemory:
         :type size: int
         :return: The value stored in data memory, or a string "Write Enable is unset!"
                  if the write enable is not set.
+        :rtype: int
         :raises ValueError: If the size argument is invalid or the value is greater
                            than the maximum value for the specified size.
         :raises IndexError: If the address is out of bounds for the specified size.
         """
         if not self.write_enable:
-            return 'Write Enable is unset!'
+            return "Write Enable is unset!"
         elif size not in (DataMemory.BYTE, DataMemory.HALF_WORD, DataMemory.WORD):
-            raise ValueError(f"Invalid size argument {(size)}, must be DataMemory.BYTE, "
-                             "DataMemory.HALF_WORD, or DataMemory.WORD!")
+            raise ValueError(
+                f"Invalid size argument {(size)}, must be DataMemory.BYTE, "
+                "DataMemory.HALF_WORD, or DataMemory.WORD!"
+            )
         elif address % 4 != 0:
-            raise IndexError(f'Invalid address ({address}). Must be a multiple of 4!')
+            raise IndexError(f"Invalid address ({address}). Must be a multiple of 4!")
         elif size == DataMemory.BYTE:
-            #if value > 0xFF:
+            # if value > 0xFF:
             #    raise ValueError(f'Value ({value}) is greater than 0xFF.')
             self.data_in = mask_bits(value, 0, 7)
             if address >= len(self.data):
-                raise IndexError(f'Accessing out of bounds address ({address}) in data memory!')
+                raise IndexError(
+                    f"Accessing out of bounds address ({address}) in data memory!"
+                )
             self.data[address] = self.data_in
             return self.data[address]
         elif size == DataMemory.HALF_WORD:
-            #if value > 0xFFFF:
+            # if value > 0xFFFF:
             #    raise ValueError(f'Value ({value}) is greater than 0xFFFF.')
             self.data_in = mask_bits(value, 0, 15)
             if address + 1 >= len(self.data):
-                raise IndexError(f'Accessing out of bounds address ({address}) in data memory!')
+                raise IndexError(
+                    f"Accessing out of bounds address ({address}) in data memory!"
+                )
             self.data[address] = mask_bits(self.data_in, 0, 7)
             self.data[address + 1] = mask_bits(self.data_in, 8, 15)
             return self.data[address] | (self.data[address + 1] << 8)
         elif size == DataMemory.WORD:
             if value > 0xFFFFFFFF:
-                raise ValueError(f'Value ({value}) is greater than 0xFFFFFFFF.')
+                raise ValueError(f"Value ({value}) is greater than 0xFFFFFFFF.")
             self.data_in = value
             if address + 3 >= len(self.data):
-                raise IndexError(f'Accessing out of bounds address ({address}) in data memory!')
+                raise IndexError(
+                    f"Accessing out of bounds address ({address}) in data memory!"
+                )
             self.data[address] = mask_bits(self.data_in, 0, 7)
             self.data[address + 1] = mask_bits(self.data_in, 8, 15)
             self.data[address + 2] = mask_bits(self.data_in, 16, 23)
             self.data[address + 3] = mask_bits(self.data_in, 24, 31)
-            return (self.data[address] | (self.data[address + 1] << 8) |
-                    (self.data[address + 2] << 16) | (self.data[address + 3] << 24))
+            return (
+                self.data[address]
+                | (self.data[address + 1] << 8)
+                | (self.data[address + 2] << 16)
+                | (self.data[address + 3] << 24)
+            )
 
     def print_data(self):
         """
         Prints the contents of data memory, with each line showing the address in hexadecimal and its value.
 
         :return: None
+        :rtype: NoneType
         """
         for i in range(len(self.data)):
-            print('Pos {:0X}: 0x{:04X}'.format(i, self.get_value(i)))
+            print("Pos {:0X}: 0x{:04X}".format(i, self.get_value(i)))
 
     def clear_memory(self):
         """
         Clears the contents of data memory by setting all memory locations to 0.
 
         :return: None
+        :rtype: NoneType
         """
         self.data = [0] * 4 * self.words

@@ -26,7 +26,7 @@ options:
 - [x] Support for register API names
 - [x] Support for parenthesis notation, e.g. `sw x3, 0(x4)` instead of `sw x3, x4, 0`
 - [x] Support for other representations of immediates (hex, bin)
-- [ ] Support for comments
+- [ ] Support for comments (Anything after the right operands of the instructions is ignored, but not because of the # sign)
 - [ ] Support for pseudo-instructions
 - [ ] Support for labels
 - [x] CLI execution and flags

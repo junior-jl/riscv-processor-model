@@ -28,31 +28,34 @@ def cpu():
 # 7485619
 # 1076025651
 
+
 def test_load_instruction_from_asm_file(cpu):
-    cpu.load_instructions_from_asm_file('files/test_r.s')
+    cpu.load_instructions_from_asm_file("files/test_r.s")
     assert cpu.instructions is not None
-    assert cpu.instructions == [1048851,
-                                2097555,
-                                52429331,
-                                4237296275,
-                                3212083,
-                                4293555,
-                                1076954163,
-                                1079247923,
-                                4388019,
-                                4384051,
-                                3216819,
-                                3233331,
-                                4376243,
-                                3221299,
-                                2205619,
-                                4438067,
-                                7485619,
-                                1076025651]
+    assert cpu.instructions == [
+        1048851,
+        2097555,
+        52429331,
+        4237296275,
+        3212083,
+        4293555,
+        1076954163,
+        1079247923,
+        4388019,
+        4384051,
+        3216819,
+        3233331,
+        4376243,
+        3221299,
+        2205619,
+        4438067,
+        7485619,
+        1076025651,
+    ]
 
 
 def test_fetch_current_instruction(cpu):
-    cpu.load_instructions_from_asm_file('files/test_r.s')
+    cpu.load_instructions_from_asm_file("files/test_r.s")
     assert cpu.fetch_current_instruction() == 1048851
     cpu.datapath.prog_counter.set_value(8)
     assert cpu.fetch_current_instruction() == 52429331
@@ -60,7 +63,7 @@ def test_fetch_current_instruction(cpu):
 
 def test_run_r(cpu):
     cpu.reset()
-    cpu.run('files/test_r.s')
+    cpu.run("files/test_r.s")
     assert cpu.datapath.reg_files.get_value(0) == 0
     assert cpu.datapath.reg_files.get_value(1) == 0
     assert cpu.datapath.reg_files.get_value(2) == 0x1
@@ -88,7 +91,7 @@ def test_run_r(cpu):
 
 def test_run_ls(cpu):
     cpu.reset()
-    cpu.run('files/test_loads_stores.s')
+    cpu.run("files/test_loads_stores.s")
     assert cpu.datapath.reg_files.get_value(0) == 0
     assert cpu.datapath.reg_files.get_value(1) == 0
     assert cpu.datapath.reg_files.get_value(2) == 0
@@ -126,7 +129,7 @@ def test_run_ls(cpu):
 
 def test_run_i(cpu):
     cpu.reset()
-    cpu.run('files/test_I.s')
+    cpu.run("files/test_I.s")
     assert cpu.datapath.reg_files.get_value(0) == 0
     assert cpu.datapath.reg_files.get_value(1) == 0x7D0
     assert cpu.datapath.reg_files.get_value(2) == 0x1
@@ -152,7 +155,7 @@ def test_run_i(cpu):
 
 def test_run_jalr(cpu):
     cpu.reset()
-    cpu.run('files/test_jalr.s')
+    cpu.run("files/test_jalr.s")
     assert cpu.datapath.reg_files.get_value(0) == 0
     assert cpu.datapath.reg_files.get_value(1) == 0x8
     assert cpu.datapath.reg_files.get_value(2) == 0x0
@@ -169,7 +172,7 @@ def test_run_jalr(cpu):
 
 def test_run_uj(cpu):
     cpu.reset()
-    cpu.run('files/test_uj.s')
+    cpu.run("files/test_uj.s")
     assert cpu.datapath.reg_files.get_value(0) == 0
     assert cpu.datapath.reg_files.get_value(1) == 0x8
     assert cpu.datapath.reg_files.get_value(2) == 0x0
@@ -185,7 +188,7 @@ def test_run_uj(cpu):
 
 def test_run_u(cpu):
     cpu.reset()
-    cpu.run('files/test_u.s')
+    cpu.run("files/test_u.s")
     assert cpu.datapath.reg_files.get_value(0) == 0
     assert cpu.datapath.reg_files.get_value(1) == 0x0
     assert cpu.datapath.reg_files.get_value(2) == 0x0
@@ -201,7 +204,7 @@ def test_run_u(cpu):
 
 def test_run_sb(cpu):
     cpu.reset()
-    cpu.run('files/test_branches.s')
+    cpu.run("files/test_branches.s")
     assert cpu.datapath.reg_files.get_value(0) == 0
     assert cpu.datapath.reg_files.get_value(1) == 0x1
     assert cpu.datapath.reg_files.get_value(2) == 0x2
@@ -216,9 +219,10 @@ def test_run_sb(cpu):
         x |= cpu.datapath.reg_files.get_value(i)
     assert x == 0
 
+
 def test_run_general_1(cpu):
     cpu.reset()
-    cpu.run('files/general_test_1.s')
+    cpu.run("files/general_test_1.s")
     assert cpu.datapath.reg_files.get_value(0) == 0
     assert cpu.datapath.reg_files.get_value(1) == 0x0
     assert cpu.datapath.reg_files.get_value(2) == 0x0
