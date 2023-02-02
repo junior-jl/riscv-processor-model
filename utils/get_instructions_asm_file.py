@@ -16,6 +16,8 @@ def get_instructions_asm_file(file):
     else:
         with f:
             for line in f:
-                # Remove the newlines
-                instructions.append(line.rstrip())
+                # Allow one-line comments and ignore blank lines
+                if line != '\n' and line[0] != '#':
+                    # Remove the newlines
+                    instructions.append(line.rstrip())
     return tuple(instructions)
