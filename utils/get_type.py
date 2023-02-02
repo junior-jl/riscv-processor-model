@@ -59,7 +59,19 @@ def get_type(inst):
     # UJ-Type
     elif operation.lower() == "jal":
         type = InstructionType.UJ
-    elif operation.lower() in ['beqz', 'bnez', 'j', 'jr', 'la', 'li', 'mv', 'neg', 'nop', 'not', 'ret']:
+    elif operation.lower() in [
+        "beqz",
+        "bnez",
+        "j",
+        "jr",
+        "la",
+        "li",
+        "mv",
+        "neg",
+        "nop",
+        "not",
+        "ret",
+    ]:
         type = InstructionType.PSEUDO
     else:
         raise ValueError("Invalid instruction!")

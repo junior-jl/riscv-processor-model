@@ -174,3 +174,14 @@ class DataMemory:
         :rtype: NoneType
         """
         self.data = [0] * 4 * self.words
+
+    def print_address(self, address):
+        """
+        Prints the content of a given address in data memory
+
+        :param address: address to print content
+        :type address: int
+        :return: None
+        :rtype: NoneType
+        """
+        print(f"DataMem {address}: {self.get_value(address)}")

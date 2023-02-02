@@ -346,40 +346,40 @@ def _encode_uj(inst, mnemonic):
 
 
 def _encode_pseudo(inst, mnemonic):
-    if mnemonic == 'nop':
-        return _encode_i(['addi', 'x0', 'x0', '0'], 'addi')
-    elif mnemonic == 'li':
+    if mnemonic == "nop":
+        return _encode_i(["addi", "x0", "x0", "0"], "addi")
+    elif mnemonic == "li":
         rd = inst[1]
         imm = inst[2]
-        return _encode_i(['addi', rd, 'x0', imm], 'addi')
-    elif mnemonic == 'mv':
+        return _encode_i(["addi", rd, "x0", imm], "addi")
+    elif mnemonic == "mv":
         rd = inst[1]
         rs = inst[2]
-        return _encode_i(['addi', rd, rs, '0'], 'addi')
-    elif mnemonic == 'not':
+        return _encode_i(["addi", rd, rs, "0"], "addi")
+    elif mnemonic == "not":
         rd = inst[1]
         rs = inst[2]
-        return _encode_i(['xori', rd, rs, '-1'], 'xori')
-    elif mnemonic == 'neg':
+        return _encode_i(["xori", rd, rs, "-1"], "xori")
+    elif mnemonic == "neg":
         rd = inst[1]
         rs = inst[2]
-        return _encode_r(['sub', rd, 'x0', rs], 'sub')
-    elif mnemonic == 'beqz':
+        return _encode_r(["sub", rd, "x0", rs], "sub")
+    elif mnemonic == "beqz":
         rs = inst[1]
         offset = inst[2]
-        return _encode_sb(['beq', rs, 'x0', offset], 'beq')
-    elif mnemonic == 'bnez':
+        return _encode_sb(["beq", rs, "x0", offset], "beq")
+    elif mnemonic == "bnez":
         rs = inst[1]
         offset = inst[2]
-        return _encode_sb(['bne', rs, 'x0', offset], 'bne')
-    elif mnemonic == 'j':
+        return _encode_sb(["bne", rs, "x0", offset], "bne")
+    elif mnemonic == "j":
         offset = inst[1]
-        return _encode_uj(['jal', 'x0', offset], 'jal')
-    elif mnemonic == 'jr':
+        return _encode_uj(["jal", "x0", offset], "jal")
+    elif mnemonic == "jr":
         rs = inst[1]
-        return _encode_i(['jalr', 'x0', rs, '0'], 'jalr')
-    elif mnemonic == 'ret':
-        return _encode_i(['jalr', 'x0', 'x1', '0'], 'jalr')
+        return _encode_i(["jalr", "x0", rs, "0"], "jalr")
+    elif mnemonic == "ret":
+        return _encode_i(["jalr", "x0", "x1", "0"], "jalr")
     else:
         raise ValueError(f"Invalid mnemonic ({mnemonic})!")
 
@@ -396,8 +396,19 @@ def encode_instruction(instruction):
     """
     instruction = get_instruction_parts(instruction)
     inst_type, inst_operation = get_type(instruction)
-    if len(instruction) > 4 and instruction[4][0] != '#':
-        raise ValueError('Comments should start with the # sign!')
+    # TODO: Refactor | To get comments working in pseudoinstructions, maybe call this function again after
+    #  'translating' it
+    if inst_type in [
+        InstructionType.R,
+        InstructionType.I,
+        InstructionType.S,
+        InstructionType.SB,
+    ]:
+        if len(instruction) > 4 and instruction[4][0] != "#":
+            raise ValueError("Comments should start with the # sign!")
+    else:
+        if len(instruction) > 3 and instruction[3][0] != "#":
+            raise ValueError("Comments should start with the # sign!")
     if inst_type == InstructionType.R:
         return _encode_r(instruction, inst_operation)
     elif inst_type == InstructionType.I:

@@ -3,11 +3,13 @@
 ## Usage
 
 ```bash
-usage: main.py [-h] [-f FILE] [-reg] [-mem]
+usage: main.py [-h] [-f FILE] [-r R] [-d D] [-reg] [-mem]
 
 options:
   -h, --help            show this help message and exit
   -f FILE, --file FILE  file to run
+  -r R                  print specified register value
+  -d D                  print value on specified data memory address
   -reg                  print register values
   -mem                  print data memory values
 ```

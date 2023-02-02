@@ -176,3 +176,23 @@ class Processor:
         self.control.reset()
         self.instructions = None
         self.current_instruction = None
+
+    def print_reg(self, key):
+        """
+        Prints a register in the Register Files given a key.
+        :param key: the register to print
+        :type key: int
+        :return: None
+        :rtype: NoneType
+        """
+        print(f"Register {key}: {self.datapath.reg_files.get_value(key)}")
+
+    def print_data_address(self, address):
+        """
+        Prints a register in the Register Files given a key.
+        :param address: the address to the data memory
+        :type address: int
+        :return: None
+        :rtype: NoneType
+        """
+        self.datapath.data_mem.print_address(address)
