@@ -112,10 +112,21 @@ f3 = {
 
 
 def _encode_r(inst, mnemonic):
+    """
+    Encode R-Type instruction into 32-bit machine code.
+
     # R-Type
     # funct7    rs2     rs1     funct3      rd      opcode
     #  (7)      (5)     (5)       (3)       (5)       (7)
     # opcode = 0110011 (0x33)
+
+    :param inst: A list of strings that represents the instruction and its operands
+    :type inst: list
+    :param mnemonic: The string containing the mnemonic of the instruction
+    :type mnemonic: str
+    :return: The encoded instruction in 32-bit format
+    :rtype: int
+    """
     rd = registers[inst[1]]
     rs1 = registers[inst[2]]
     rs2 = registers[inst[3]]
@@ -134,10 +145,21 @@ def _encode_r(inst, mnemonic):
 
 
 def _encode_i(inst, mnemonic):
+    """
+    Encode I-Type instruction into 32-bit machine code.
+
     # I-Type
     # imm[11:0]    rs1     funct3      rd      opcode
     #    (12)      (5)       (3)       (5)       (7)
     # opcode = 0010011 (0x13) - arithmetics, 0000011 (0x03) - loads, 1100111 (0x67) - jalr
+
+    :param inst: A list of strings that represents the instruction and its operands
+    :type inst: list
+    :param mnemonic: The string containing the mnemonic of the instruction
+    :type mnemonic: str
+    :return: The encoded instruction in 32-bit format
+    :rtype: int
+    """
     rd = registers[inst[1]]
     if inst[2] in registers.keys():
         rs1 = registers[inst[2]]
@@ -170,10 +192,21 @@ def _encode_i(inst, mnemonic):
 
 
 def _encode_s(inst, mnemonic):
+    """
+    Encode S-Type instruction into 32-bit machine code.
+
     # S-Type
     # imm[11:5]     rs2     rs1     funct3     imm[4:0]     opcode
     #   (7)         (5)     (5)       (3)         (5)        (7)
     # opcode = 0100011 (0x23)
+
+    :param inst: A list of strings that represents the instruction and its operands
+    :type inst: list
+    :param mnemonic: The string containing the mnemonic of the instruction
+    :type mnemonic: str
+    :return: The encoded instruction in 32-bit format
+    :rtype: int
+    """
     rs2 = registers[inst[1]]
     if inst[2] in registers.keys():
         rs1 = registers[inst[2]]
@@ -202,11 +235,22 @@ def _encode_s(inst, mnemonic):
 
 
 def _encode_u(inst, mnemonic):
+    """
+    Encode U-Type instruction into 32-bit machine code.
+
     # U-Type
     # imm[31:12]     rd     opcode
     #    (20)        (5)      (7)
     # opcode = 0110111 (0x37) -> lui
     # opcode = 0010111 (0x17) -> auipc
+
+    :param inst: A list of strings that represents the instruction and its operands
+    :type inst: list
+    :param mnemonic: The string containing the mnemonic of the instruction
+    :type mnemonic: str
+    :return: The encoded instruction in 32-bit format
+    :rtype: int
+    """
     opcode = 0x37 if mnemonic == "lui" else 0x17
     rd = registers[inst[1]]
     if inst[2][0:2] in ["0x", "0X"]:
@@ -224,10 +268,21 @@ def _encode_u(inst, mnemonic):
 
 
 def _encode_sb(inst, mnemonic):
+    """
+    Encode SB-Type instruction into 32-bit machine code.
+
     # SB-Type
     # imm[12]   imm[10:5]   rs2     rs1     funct3      imm[4:1]    imm[11]     opcode
     #   (1)        (6)      (5)     (5)       (3)          (4)        (1)         (7)
     # opcode = 1100011 (0x63)
+
+    :param inst: A list of strings that represents the instruction and its operands
+    :type inst: list
+    :param mnemonic: The string containing the mnemonic of the instruction
+    :type mnemonic: str
+    :return: The encoded instruction in 32-bit format
+    :rtype: int
+    """
     opcode = 0x63
     rs1 = registers[inst[1]]
     rs2 = registers[inst[2]]
@@ -253,10 +308,22 @@ def _encode_sb(inst, mnemonic):
 
 
 def _encode_uj(inst, mnemonic):
+    """
+    Encode UJ-Type instruction into 32-bit machine code.
+
     # UJ-Type
     # imm[20]   imm[10:1]   imm[11]     imm[19:12]    rd      opcode
     #   (1)        (10)       (1)           (8)       (5)       (7)
     # opcode = 1101111 (0x6F) -> jal
+
+    :param inst: A list of strings that represents the instruction and its operands
+    :type inst: list
+    :param mnemonic: The string containing the mnemonic of the instruction
+    :type mnemonic: str
+    :return: The encoded instruction in 32-bit format
+    :rtype: int
+    """
+    # TODO: Mnemonic unused, refactor!
     opcode = 0x6F
     rd = registers[inst[1]]
     if inst[2][0:2] in ["0x", "0X"]:
@@ -278,6 +345,15 @@ def _encode_uj(inst, mnemonic):
 
 
 def encode_instruction(instruction):
+    """
+    Encode a RISC-V Assembly instruction into 32-bit machine code based on its type.
+
+    :param instruction: The Assembly instruction to be encoded into machine code
+    :type instruction: str
+    :return: The encoded instruction
+    :rtype: int
+    :raises: ValueError if the type of instruction is not valid for RV32I
+    """
     instruction = get_instruction_parts(instruction)
     inst_type, inst_operation = get_type(instruction)
     if inst_type == InstructionType.R:

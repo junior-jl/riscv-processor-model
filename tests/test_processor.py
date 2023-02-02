@@ -9,26 +9,6 @@ def cpu():
     return Processor()
 
 
-# 1048851
-# 2097555
-# 52429331
-# 4503599626322579
-# 3212083
-# 4293555
-# 1076954163
-# 1079247923
-# 4388019
-# 4384051
-# 3216819
-# 3233331
-# 4376243
-# 3221299
-# 2205619
-# 4438067
-# 7485619
-# 1076025651
-
-
 def test_load_instruction_from_asm_file(cpu):
     cpu.load_instructions_from_asm_file("files/test_r.s")
     assert cpu.instructions is not None

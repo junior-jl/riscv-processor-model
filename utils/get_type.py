@@ -7,14 +7,11 @@ def get_type(inst):
     This function takes an instruction as input and returns its operation and type according to the RISC-V
     instruction set. The instruction type can be R, I, S, U, SB or UJ.
 
-    Parameters:
-    inst (list[str]): A list containing the parts of a RISC-V assembly instruction.
-
-    Returns:
-    Tuple[InstructionType, str]: A tuple containing the instruction operation and its type.
-
-    Raises:
-    ValueError: If the instruction is not valid.
+    :param inst: A list containing the parts of a RISC-V assembly instruction
+    :type inst: list
+    :return: A tuple containing the instruction operation and its type
+    :rtype: tuple
+    :raises: ValueError if the instruction is not valid
     """
     operation = inst[0]
     # R-Type
