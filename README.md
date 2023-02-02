@@ -26,9 +26,10 @@ options:
 - [x] Support for register API names
 - [x] Support for parenthesis notation, e.g. `sw x3, 0(x4)` instead of `sw x3, x4, 0`
 - [x] Support for other representations of immediates (hex, bin)
-- [ ] Support for comments (Anything after the right operands of the instructions is ignored, but not because of the # sign)
-- [ ] Support for pseudo-instructions
+- [x] Support for comments (Not with pseudoinstructions yet)
+- [x] Support for pseudo-instructions (except `la`)
 - [ ] Support for labels
+- [ ] Support for 'pseudo' `jal` and `jalr`. Ex: `jal offset` -> `jal ra offset`
 - [x] CLI execution and flags
 - [ ] Simple GUI
 - [ ] Make it a Python Package
@@ -80,6 +81,22 @@ options:
 | **UJ Type**                              |              |     |     |       |            |                                       |
 | JUMP AND LINK                            | jal          | rd  | imm |       | OK         |                                       |
 
+### Current Status of Pseudoinstructions
+
+| Instruction                 | **mnemonic** |        |        |     | **STATUS** | **NOTE** |
+|-----------------------------|--------------|--------|--------|-----|------------|----------|
+| NO OPERATION                | nop          |        |        |     | OK         |          |
+| LOAD IMMEDIATE              | li           | rd     | imm    |     | OK         |          |
+| COPY REGISTER               | mv           | rd     | rs     |     | OK         |          |
+| ONE'S COMPLEMENT            | not          | rd     | rs     |     | OK         |          |
+| TWO'S COMPLEMENT            | neg          | rd     | rs     |     | OK         |          |
+| BRANCH IF EQUAL TO ZERO     | beqz         | rs     | offset |     | OK         |          |
+| BRANCH IF NOT EQUAL TO ZERO | bnez         | rs     | offset |     | OK         |          |
+| JUMP                        | j            | offset |        |     | OK         |          |
+| JUMP REGISTER               | jr           | rs     |        |     | OK         |          |
+| RETURN FROM SUBROUTINE      | ret          |        |        |     | OK         |          |
+| LOAD ADDRESS                | la           | rd     | symbol |     | TODO       |          |
+
 ### Diagram of the processor
 
 ![diagram](https://user-images.githubusercontent.com/69206952/215910571-19ea05a2-a4a4-4091-8b83-9e2aad815697.png)
@@ -88,3 +105,5 @@ options:
 
 - [x] Negative sums and subs
 - [x] Negative jumps
+- [ ] Comments on pseudoinstructions
+- [ ] Tests not passing together when running `pytest` on terminal, but pass on Pycharm. Also, all tests pass individually.

@@ -324,6 +324,7 @@ def _encode_uj(inst, mnemonic):
     :rtype: int
     """
     # TODO: Mnemonic unused, refactor!
+    # TODO: Add option to write 'jal offset' meaning 'jal ra, offset'
     opcode = 0x6F
     rd = registers[inst[1]]
     if inst[2][0:2] in ["0x", "0X"]:
@@ -342,6 +343,45 @@ def _encode_uj(inst, mnemonic):
     encoded_instruction |= opcode
     encoded_instruction = mask_bits(encoded_instruction, 0, 31)
     return encoded_instruction
+
+
+def _encode_pseudo(inst, mnemonic):
+    if mnemonic == 'nop':
+        return _encode_i(['addi', 'x0', 'x0', '0'], 'addi')
+    elif mnemonic == 'li':
+        rd = inst[1]
+        imm = inst[2]
+        return _encode_i(['addi', rd, 'x0', imm], 'addi')
+    elif mnemonic == 'mv':
+        rd = inst[1]
+        rs = inst[2]
+        return _encode_i(['addi', rd, rs, '0'], 'addi')
+    elif mnemonic == 'not':
+        rd = inst[1]
+        rs = inst[2]
+        return _encode_i(['xori', rd, rs, '-1'], 'xori')
+    elif mnemonic == 'neg':
+        rd = inst[1]
+        rs = inst[2]
+        return _encode_r(['sub', rd, 'x0', rs], 'sub')
+    elif mnemonic == 'beqz':
+        rs = inst[1]
+        offset = inst[2]
+        return _encode_sb(['beq', rs, 'x0', offset], 'beq')
+    elif mnemonic == 'bnez':
+        rs = inst[1]
+        offset = inst[2]
+        return _encode_sb(['bne', rs, 'x0', offset], 'bne')
+    elif mnemonic == 'j':
+        offset = inst[1]
+        return _encode_uj(['jal', 'x0', offset], 'jal')
+    elif mnemonic == 'jr':
+        rs = inst[1]
+        return _encode_i(['jalr', 'x0', rs, '0'], 'jalr')
+    elif mnemonic == 'ret':
+        return _encode_i(['jalr', 'x0', 'x1', '0'], 'jalr')
+    else:
+        raise ValueError(f"Invalid mnemonic ({mnemonic})!")
 
 
 def encode_instruction(instruction):
@@ -370,5 +410,7 @@ def encode_instruction(instruction):
         return _encode_sb(instruction, inst_operation)
     elif inst_type == InstructionType.UJ:
         return _encode_uj(instruction, inst_operation)
+    elif inst_type == InstructionType.PSEUDO:
+        return _encode_pseudo(instruction, inst_operation)
     else:
-        raise ValueError("Invalid type of instruction")
+        raise ValueError(f"Invalid type of instruction ({inst_type})!")

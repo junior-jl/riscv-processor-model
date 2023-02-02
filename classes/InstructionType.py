@@ -12,3 +12,4 @@ class InstructionType(Enum):
     U = "U"
     SB = "SB"
     UJ = "UJ"
+    PSEUDO = "PSEUDO"
