@@ -7,13 +7,21 @@ from utils.encode_instruction import encode_instruction
     "instruction, expected_output",
     [
         ("addi x8, x9, -12", 0xFF448413),
+        ("addi x8, x9, -12 # Comment test", 0xFF448413),
         ("addi x7, x0, 244", 0x0F400393),
+        ("addi x7, x0, 244 #", 0x0F400393),
         ("sw x2, x3, 40", 0x0221A423),
+        ("sw x2, x3, 40 ###########", 0x0221A423),
         ("sw x2, x3, 0x28", 0x0221A423),
+        ("sw x2, x3, 0x28 ##### Hi", 0x0221A423),
         ("sw x2, x3, 0b101000", 0x0221A423),
+        ("sw x2, x3, 0b101000 Hi", ValueError),
         ("sw x2, 40(x3)", 0x0221A423),
+        ("sw x2, 40(x3) 4##", ValueError),
         ("sw x2, 0x28(x3)", 0x0221A423),
+        ("sw x2, 0x28(x3) ### OK", 0x0221A423),
         ("sw x2, 0b101000(x3)", 0x0221A423),
+        ("sw x2, 0b101000(x3) ##OK", 0x0221A423),
         ("lui, x5, 65535", 0x0FFFF2B7),
         ("lui, x5, 0xFFFF", 0x0FFFF2B7),
         ("lui, x5, 0b1111111111111111", 0x0FFFF2B7),
@@ -45,4 +53,7 @@ from utils.encode_instruction import encode_instruction
     ],
 )
 def test_encode_instruction(instruction, expected_output):
-    assert encode_instruction(instruction) == expected_output
+    if expected_output == ValueError:
+        pytest.raises(ValueError)
+    else:
+        assert encode_instruction(instruction) == expected_output

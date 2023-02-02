@@ -356,6 +356,8 @@ def encode_instruction(instruction):
     """
     instruction = get_instruction_parts(instruction)
     inst_type, inst_operation = get_type(instruction)
+    if len(instruction) > 4 and instruction[4][0] != '#':
+        raise ValueError('Comments should start with the # sign!')
     if inst_type == InstructionType.R:
         return _encode_r(instruction, inst_operation)
     elif inst_type == InstructionType.I:
