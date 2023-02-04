@@ -3,15 +3,16 @@
 ## Usage
 
 ```
-usage: main.py [-h] [-f FILE] [-r R] [-d D] [-reg] [-mem]
+usage: main.py [-h] [-f FILE] [-r R] [-d D] [-reg] [-mem] [-gui]
 
-options:
+optional arguments:
   -h, --help            show this help message and exit
   -f FILE, --file FILE  file to run
   -r R                  print specified register value
   -d D                  print value on specified data memory address
   -reg                  print register values
   -mem                  print data memory values
+  -gui                  open simple GUI
 ```
 
 ## Steps of a cycle
@@ -33,7 +34,7 @@ options:
 - [ ] Support for labels
 - [ ] Support for 'pseudo' `jal` and `jalr`. Ex: `jal offset` -> `jal ra offset`
 - [x] CLI execution and flags
-- [ ] Simple GUI
+- [x] Simple GUI
 - [ ] Make it a Python Package
 - [ ] Documentation
 
