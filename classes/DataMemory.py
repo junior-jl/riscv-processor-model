@@ -164,7 +164,7 @@ class DataMemory:
         :rtype: NoneType
         """
         for i in range(len(self.data)):
-            print("Pos {:0X}: 0x{:04X}".format(i, self.get_value(i)))
+            print("Pos {:0X}: 0x{:02X}".format(i, self.get_value(i)))
 
     def clear_memory(self):
         """

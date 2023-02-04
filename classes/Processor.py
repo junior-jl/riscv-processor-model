@@ -129,12 +129,12 @@ class Processor:
         :return: None
         :rtype: NoneType
         """
-        #print(
+        # print(
         #    "IMEM {:0X}:  {:08X}".format(
         #        4 * self.instructions.index(self.current_instruction),
         #        self.current_instruction,
         #    )
-        #)
+        # )
         self.control.run()
         self.datapath.set_signals(*self.control.get_signals())
         self.datapath.run()
@@ -148,12 +148,12 @@ class Processor:
         :return: None
         :rtype: NoneType
         """
-        #print(
+        # print(
         #    "IMEM {:0X}:  {:08X}".format(
         #        4 * self.instructions.index(self.current_instruction),
         #        self.current_instruction,
         #    )
-        #)
+        # )
         self.control.run()
         self.datapath.set_signals(*self.control.get_signals())
         self.datapath.first_run_branch()
@@ -189,7 +189,7 @@ class Processor:
 
     def print_data_address(self, address):
         """
-        Prints a register in the Register Files given a key.
+        Prints a value in the memory data given an address.
         :param address: the address to the data memory
         :type address: int
         :return: None

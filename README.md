@@ -111,3 +111,4 @@ optional arguments:
 - [x] Negative jumps
 - [ ] Comments on pseudoinstructions
 - [ ] Tests not passing together when running `pytest` on terminal, but pass on Pycharm. Also, all tests pass individually.
+- [ ] Infinite loops

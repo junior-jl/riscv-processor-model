@@ -386,14 +386,14 @@ class ControlUnit:
         elif self.inst_opcode in [0x13, 0x03, 0x67]:
             self.inst_type = InstructionType.I
             if self.inst_opcode == 0x03:
-                self.inst_load = True
+                # self.inst_load = True
                 self.set_size()
-            else:
-                self.inst_load = False
-            if self.inst_opcode == 0x67:
-                self.inst_jalr = True
-            else:
-                self.inst_jalr = False
+            # else:
+            # self.inst_load = False
+            # if self.inst_opcode == 0x67:
+            # self.inst_jalr = True
+            # else:
+            # self.inst_jalr = False
         elif self.inst_opcode == 0x23:
             self.inst_type = InstructionType.S
             self.set_size()
@@ -407,6 +407,8 @@ class ControlUnit:
             raise ValueError(
                 f"Invalid instruction! Opcode ({self.inst_opcode}) not supported!"
             )
+        self.inst_load = False if self.inst_opcode != 0x03 else True
+        self.inst_jalr = False if self.inst_opcode != 0x67 else True
 
     def get_operation(self):
         """

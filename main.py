@@ -9,53 +9,107 @@ from utils.get_instructions_asm_file import get_instructions_asm_file
 
 
 def interface():
-    sg.theme('DarkGrey14')
+    sg.theme("DarkGrey14")
 
-    layout = [[sg.Text('RV32I Processor Model', font='Any 15')],
-              [sg.Text('Assembly File'), sg.Input(key='-sourcefile-', size=(45, 1)),
-               sg.FileBrowse(file_types=(("Assembly Files", "*.s"),))],
-              [sg.Checkbox('Print Memory', key='-mem-'), sg.Checkbox('Print Registers', key='-reg-')],
-              [sg.Text('Specify registers: '), sg.Input(key='-registers-')],
-              [sg.Frame('Output', font='Any 15', layout=[
-                  [sg.Output(size=(65, 15), font='Courier 10')]])],
-              [sg.Button('Run', bind_return_key=True),
-               sg.Button('Quit', button_color=('white', 'firebrick3'))]]
+    layout = [
+        [sg.Text("RV32I Processor Model", font="Any 15")],
+        [
+            sg.Text("Assembly File"),
+            sg.Input(
+                key="-sourcefile-",
+                size=(45, 1),
+                tooltip="Insert the file with the Assembly instructions.",
+            ),
+            sg.FileBrowse(file_types=(("Assembly Files", "*.s"),)),
+        ],
+        [
+            sg.Checkbox(
+                "Print Memory",
+                key="-mem-",
+                tooltip="Check if you want to print the contents on the data memory.",
+            ),
+            sg.Checkbox(
+                "Print Registers",
+                key="-reg-",
+                tooltip="Check if you want to print the contents on the register files.",
+            ),
+        ],
+        [
+            sg.Text("Specify registers: "),
+            sg.Input(
+                key="-registers-",
+                tooltip="Insert the registers you want to print separated by commas.",
+            ),
+            sg.Text("Memory addresses: "),
+            sg.Input(
+                key="-addresses-",
+                tooltip="Insert the registers you want to print separated by commas.",
+            ),
+        ],
+        [
+            sg.Frame(
+                "Output",
+                font="Any 15",
+                layout=[[sg.Output(size=(65, 15), font="Courier 10")]],
+            )
+        ],
+        [
+            sg.Button("Run", bind_return_key=True),
+            sg.Button("Quit", button_color=("white", "firebrick3")),
+        ],
+    ]
 
-    window = sg.Window('RV32I Processor Model', layout, auto_size_text=False, auto_size_buttons=False,
-                       default_element_size=(20, 1), text_justification='right')
+    window = sg.Window(
+        "RV32I Processor Model",
+        layout,
+        auto_size_text=False,
+        auto_size_buttons=False,
+        default_element_size=(20, 1),
+        text_justification="right",
+    )
     # ---===--- Loop taking in user input --- #
     while True:
-
         event, values = window.read()
-        if event in ('Quit', sg.WIN_CLOSED):
+        if event in ("Quit", sg.WIN_CLOSED):
             window.close()
             break
-        registers_to_print = [int(i) for i in re.split("[ ,]", values['-registers-']) if i]
-        source_file = values['-sourcefile-']
+        registers_to_print = [
+            int(i) for i in re.split("[ ,]", values["-registers-"]) if i
+        ]
+        addresses_to_print = [
+            int(i) for i in re.split("[ ,]", values["-addresses-"]) if i
+        ]
+        source_file = values["-sourcefile-"]
 
-        if event == 'Run':
+        if event == "Run":
             if not source_file:
-                sg.Popup('No Assembly file added! Please choose a file.')
+                sg.Popup("No Assembly file added! Please choose a file.")
             else:
+                print(source_file)
+                print("*------------------*")
+                print("Instructions")
                 instructions = get_instructions_asm_file(source_file)
+                print("*------------------*")
                 for i in range(len(instructions)):
-                    print(f'{i}: {instructions[i]}')
+                    print(f"{i}: {instructions[i]}")
                 cpu = Processor()
                 cpu.run(source_file)
-                if values['-reg-']:
-                    print('*------------------*')
-                    print('Register Files')
-                    print('*------------------*')
+                if values["-reg-"]:
+                    print("*------------------*")
+                    print("Register Files")
+                    print("*------------------*")
                     cpu.print_registers()
-                    print('*------------------*')
-                if values['-mem-']:
-                    print('*------------------*')
-                    print('Data Memory')
-                    print('*------------------*')
+                    print("*------------------*")
+                if values["-mem-"]:
+                    print("*------------------*")
+                    print("Data Memory")
+                    print("*------------------*")
                     cpu.print_data_memory()
-                    print('*------------------*')
+                    print("*------------------*")
                 if registers_to_print:
                     list(map(cpu.print_reg, registers_to_print))
+                if addresses_to_print:
+                    list(map(cpu.print_data_address, addresses_to_print))
             window.refresh()
 
 
