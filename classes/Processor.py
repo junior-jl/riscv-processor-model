@@ -48,8 +48,8 @@ class Processor:
         Load instructions from RISC-V Assembly file into the instruction memory.
         :param file: asm file containing instructions
         :type file: file
-        :return: None
-        :rtype: NoneType
+        :return: list of instructions
+        :rtype: list
         """
         self.instructions = self.datapath.load_instructions_from_asm_file(file)
 
@@ -129,12 +129,12 @@ class Processor:
         :return: None
         :rtype: NoneType
         """
-        print(
-            "IMEM {:0X}:  {:08X}".format(
-                4 * self.instructions.index(self.current_instruction),
-                self.current_instruction,
-            )
-        )
+        #print(
+        #    "IMEM {:0X}:  {:08X}".format(
+        #        4 * self.instructions.index(self.current_instruction),
+        #        self.current_instruction,
+        #    )
+        #)
         self.control.run()
         self.datapath.set_signals(*self.control.get_signals())
         self.datapath.run()
@@ -148,12 +148,12 @@ class Processor:
         :return: None
         :rtype: NoneType
         """
-        print(
-            "IMEM {:0X}:  {:08X}".format(
-                4 * self.instructions.index(self.current_instruction),
-                self.current_instruction,
-            )
-        )
+        #print(
+        #    "IMEM {:0X}:  {:08X}".format(
+        #        4 * self.instructions.index(self.current_instruction),
+        #        self.current_instruction,
+        #    )
+        #)
         self.control.run()
         self.datapath.set_signals(*self.control.get_signals())
         self.datapath.first_run_branch()

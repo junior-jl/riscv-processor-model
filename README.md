@@ -2,7 +2,7 @@
 
 ## Usage
 
-```bash
+```
 usage: main.py [-h] [-f FILE] [-r R] [-d D] [-reg] [-mem]
 
 options:
@@ -35,6 +35,7 @@ options:
 - [x] CLI execution and flags
 - [ ] Simple GUI
 - [ ] Make it a Python Package
+- [ ] Documentation
 
 ### Current Status of Instructions
 
