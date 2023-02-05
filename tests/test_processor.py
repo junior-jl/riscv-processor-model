@@ -221,3 +221,23 @@ def test_run_general_1(cpu):
             continue
         x |= cpu.datapath.reg_files.get_value(i)
     assert x == 0
+
+def test_run_general_2(cpu):
+    cpu.reset()
+    cpu.run("files/book_test.s")
+    assert cpu.datapath.reg_files.get_value(0) == 0
+    assert cpu.datapath.reg_files.get_value(1) == 0x0
+    assert cpu.datapath.reg_files.get_value(2) == 0x19
+    assert cpu.datapath.reg_files.get_value(3) == 0x44
+    assert cpu.datapath.reg_files.get_value(4) == 0x1
+    assert cpu.datapath.reg_files.get_value(5) == 0xB
+    assert cpu.datapath.reg_files.get_value(6) == 0x0
+    assert cpu.datapath.reg_files.get_value(7) == 0x7
+    assert cpu.datapath.reg_files.get_value(8) == 0x0
+    assert cpu.datapath.reg_files.get_value(9) == 0x12
+    assert cpu.datapath.data_mem.get_value(100) == 0x19
+    assert cpu.datapath.data_mem.get_value(96) == 0x7
+    x = 0
+    for i in range(10, 32):
+        x |= cpu.datapath.reg_files.get_value(i)
+    assert x == 0
