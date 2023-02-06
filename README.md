@@ -3,7 +3,7 @@
 ## Usage
 
 ```
-usage: main.py [-h] [-f FILE] [-r R] [-d D] [-reg] [-mem] [-gui]
+usage: main.py [-h] [-f FILE] [-r R] [-d D] [-reg] [-mem] [-inst] [-gui]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -12,6 +12,7 @@ optional arguments:
   -d D                  print value on specified data memory address
   -reg                  print register values
   -mem                  print data memory values
+  -inst                 print instruction memory values
   -gui                  open simple GUI
 ```
 
@@ -23,7 +24,7 @@ optional arguments:
 4. Memory
 5. Write Back
 
-### Improvements and features
+## Improvements and features
 
 - [x] Support for instructions with or without commas
 - [x] Support for register API names
@@ -38,7 +39,7 @@ optional arguments:
 - [ ] Make it a Python Package
 - [ ] Documentation
 
-### Current Status of Instructions
+## Current Status of Instructions
 
 | **R Type**                               | **mnemonic** |     |     |       | **STATUS** | **NOTE**                              |
 |------------------------------------------|--------------|-----|-----|-------|------------|---------------------------------------|
@@ -85,7 +86,7 @@ optional arguments:
 | **UJ Type**                              |              |     |     |       |            |                                       |
 | JUMP AND LINK                            | jal          | rd  | imm |       | OK         |                                       |
 
-### Current Status of Pseudoinstructions
+## Current Status of Pseudoinstructions
 
 | Instruction                 | **mnemonic** |        |        |     | **STATUS** | **NOTE** |
 |-----------------------------|--------------|--------|--------|-----|------------|----------|
@@ -101,11 +102,11 @@ optional arguments:
 | RETURN FROM SUBROUTINE      | ret          |        |        |     | OK         |          |
 | LOAD ADDRESS                | la           | rd     | symbol |     | TODO       |          |
 
-### Diagram of the processor
+## Diagram of the processor
 
 ![diagram](https://user-images.githubusercontent.com/69206952/215910571-19ea05a2-a4a4-4091-8b83-9e2aad815697.png)
 
-### Problems
+## Problems
 
 - [x] Negative sums and subs
 - [x] Negative jumps

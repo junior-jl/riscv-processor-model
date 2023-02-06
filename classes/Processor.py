@@ -115,7 +115,10 @@ class Processor:
         :return: None
         :rtype: NoneType
         """
-        self.load_instructions_from_asm_file(file)
+        if file[-2:] == '.s':
+            self.load_instructions_from_asm_file(file)
+        else:
+            self.load_instructions_from_file(file)
         while self.fetch_current_instruction():
             if self.current_instruction & 0x7F == 0x63:
                 self.run_branch()

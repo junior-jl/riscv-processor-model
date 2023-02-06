@@ -23,6 +23,15 @@ def interface():
             sg.FileBrowse(file_types=(("Assembly Files", "*.s"),)),
         ],
         [
+            sg.Text("Binary File"),
+            sg.Input(
+                key="-sourcefilebin-",
+                size=(45, 1),
+                tooltip="Insert the file with the Machine Code instructions.",
+            ),
+            sg.FileBrowse(file_types=(("Binary Files", "*"),)),
+        ],
+        [
             sg.Checkbox(
                 "Print Memory",
                 key="-mem-",
@@ -79,11 +88,20 @@ def interface():
         addresses_to_print = [
             int(i) for i in re.split("[ ,]", values["-addresses-"]) if i
         ]
-        source_file = values["-sourcefile-"]
+        source_file = values["-sourcefile-"] if values["-sourcefile-"] else values["-sourcefilebin-"]
+        cpu = Processor()
 
         if event == "Run":
+            invalid_regs = [x for x in registers_to_print if x < 0 or x > 31]
+            if invalid_regs:
+                sg.Popup(f"Invalid register(s): {invalid_regs}")
+                registers_to_print = [item for item in registers_to_print if item not in invalid_regs]
+            invalid_addr = [y for y in addresses_to_print if y < 0 or y >= (cpu.datapath.data_mem.words * 4)]
+            if invalid_addr:
+                sg.Popup(f"Invalid address(es): {invalid_addr}")
+                addresses_to_print = [item for item in addresses_to_print if item not in invalid_addr]
             if not source_file:
-                sg.Popup("No Assembly file added! Please choose a file.")
+                sg.Popup("No Assembly or Binary file added! Please choose a file.")
             else:
                 print(source_file)
                 print("*------------------*")
@@ -91,8 +109,8 @@ def interface():
                 instructions = get_instructions_asm_file(source_file)
                 print("*------------------*")
                 for i in range(len(instructions)):
-                    print(f"{i}: {instructions[i]}")
-                cpu = Processor()
+                    print(f"{i}: {instructions[i]}") if values["-sourcefile-"] else \
+                        print("{}: 0x{:08X}".format(i, int(instructions[i])))
                 cpu.run(source_file)
                 if values["-reg-"]:
                     print("*------------------*")
@@ -124,6 +142,7 @@ if __name__ == "__main__":
     )
     parser.add_argument("-reg", help="print register values", action="store_true")
     parser.add_argument("-mem", help="print data memory values", action="store_true")
+    parser.add_argument("-inst", help="print instruction memory values", action="store_true")
     parser.add_argument("-gui", help="open simple GUI", action="store_true")
     args = parser.parse_args()
     if not args.gui:
@@ -137,5 +156,7 @@ if __name__ == "__main__":
             cpu.print_registers()
         if args.mem:
             cpu.print_data_memory()
+        if args.inst:
+            cpu.print_instructions()
     else:
         interface()
