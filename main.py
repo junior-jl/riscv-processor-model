@@ -83,10 +83,10 @@ def interface():
             window.close()
             break
         registers_to_print = [
-            int(i) for i in re.split("[ ,]", values["-registers-"]) if i
+            int(i[1:]) if i.startswith('x') else int(i) for i in re.split("[ ,]", values["-registers-"]) if i
         ]
         addresses_to_print = [
-            int(i) for i in re.split("[ ,]", values["-addresses-"]) if i
+            int(i, 16) if i.startswith('0x') else int(i) for i in re.split("[ ,]", values["-addresses-"]) if i
         ]
         source_file = values["-sourcefile-"] if values["-sourcefile-"] else values["-sourcefilebin-"]
         cpu = Processor()
